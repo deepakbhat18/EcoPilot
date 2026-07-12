@@ -25,7 +25,6 @@ def seed_db():
             dept_manager_role = Role(name="Department Manager", description="Departmental Manager", permissions=["read:all", "write:social"])
             employee_role = Role(name="Employee", description="Corporate Employee", permissions=["read:all"])
             auditor_role = Role(name="Auditor", description="Third-party ESG Auditor", permissions=["read:all"])
-
             db.add_all([admin_role, esg_manager_role, dept_manager_role, employee_role, auditor_role])
             db.commit()
 
@@ -48,8 +47,6 @@ def seed_db():
     finally:
         db.close()
 
-seed_db()
-
 app = FastAPI(
     title=settings.PROJECT_NAME,
     description=settings.TAGLINE,
@@ -57,6 +54,10 @@ app = FastAPI(
     docs_url="/docs" if settings.ENVIRONMENT != "production" else None,
     redoc_url="/redoc" if settings.ENVIRONMENT != "production" else None,
 )
+
+@app.on_event("startup")
+def on_startup():
+    seed_db()
 
 if settings.BACKEND_CORS_ORIGINS:
     app.add_middleware(
