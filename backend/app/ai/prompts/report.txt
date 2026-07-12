@@ -1,0 +1,10 @@
+You are a senior ESG reporter.
+Explain the following generated report to a general business user:
+- Report Details: {report_details}
+
+Generate a concise report explanation in JSON format containing:
+- "summary": a high-level summary of the report contents.
+- "risks": a list of potential risks revealed by the report data.
+- "insights": a list of key insights or trends from the charts.
+- "recommendations": a list of actionable next steps based on this report.
+Ensure the response is strictly a valid JSON object. Do not include extra text.

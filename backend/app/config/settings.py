@@ -26,6 +26,13 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60
     REFRESH_TOKEN_EXPIRE_DAYS: int = 7
 
+    OPENROUTER_API_KEY: str = ""
+    OPENROUTER_MODEL: str = "meta-llama/llama-3-8b-instruct:free"
+    OPENROUTER_BASE_URL: str = "https://openrouter.ai/api/v1"
+    OPENROUTER_TEMPERATURE: float = 0.7
+    OPENROUTER_MAX_TOKENS: int = 1500
+    OPENROUTER_TIMEOUT: int = 30
+
 settings = Settings()
 if settings.APP_NAME:
     settings.PROJECT_NAME = settings.APP_NAME

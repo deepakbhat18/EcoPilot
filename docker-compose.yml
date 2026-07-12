@@ -26,6 +26,8 @@ services:
     environment:
       DATABASE_URL: postgresql://ecopilot_user:ecopilot%40123@db:5432/ecopilot
       JWT_SECRET_KEY: super_secret_jwt_signing_key_for_ecopilot_development_only_12345
+    env_file:
+      - ./backend/.env
     depends_on:
       db:
         condition: service_healthy

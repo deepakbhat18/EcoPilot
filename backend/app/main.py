@@ -97,3 +97,6 @@ app.include_router(reports_router, prefix=f"{settings.API_V1_STR}/reports", tags
 
 from backend.app.api.v1.demo import router as demo_router
 app.include_router(demo_router, prefix=f"{settings.API_V1_STR}/demo", tags=["Demo Mode"])
+
+from backend.app.ai.router import router as ai_router
+app.include_router(ai_router, prefix=f"{settings.API_V1_STR}/ai", tags=["AI Copilot"])
