@@ -457,7 +457,7 @@ export const Dashboard: React.FC = () => {
             <div className="flex flex-col gap-3">
               {leaderboard && leaderboard.length > 0 ? (
                 leaderboard.slice(0, 5).map((userL: any, idx: number) => (
-                  <div key={userL.user_id || `leader-${idx}`} className="flex justify-between items-center p-2.5 hover:bg-muted/30 rounded-xl transition-colors">
+                  <div key={userL.id || `leader-${idx}`} className="flex justify-between items-center p-2.5 hover:bg-muted/30 rounded-xl transition-colors">
                     <div className="flex items-center gap-3">
                       <span className="font-bold text-xs text-muted-foreground w-4">{idx + 1}</span>
                       <div className="h-8 w-8 rounded-full bg-secondary flex items-center justify-center font-bold text-muted-foreground text-xs uppercase">
@@ -468,7 +468,7 @@ export const Dashboard: React.FC = () => {
                         <span className="text-[10px] text-muted-foreground">ESG Contributor</span>
                       </div>
                     </div>
-                    <span className="text-xs font-bold text-esg-gamification">{userL.total_xp} XP</span>
+                    <span className="text-xs font-bold text-esg-gamification">{userL.xp_points} XP</span>
                   </div>
                 ))
               ) : (

@@ -13,7 +13,7 @@ router = APIRouter()
 async def get_my_profile(
     current_user: User = Depends(get_current_user)
 ) -> UserOut:
-    return current_user
+    return UserOut.model_validate(current_user)
 
 @router.get(
     "",
