@@ -1,0 +1,47 @@
+# Python virtual environment and caching
+.venv/
+venv/
+ENV/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+.pytest_cache/
+.coverage
+htmlcov/
+.cache/
+
+# Frontend Node packages and build directories
+node_modules/
+frontend/node_modules/
+dist/
+frontend/dist/
+build/
+frontend/build/
+.eslintcache
+.stylelintcache
+
+# Environment configurations (secrets)
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+backend/app/config/.env
+
+# Database migrations / logs
+*.log
+alembic.log
+
+# IDE & OS Specific
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+strip_all_comments.py
