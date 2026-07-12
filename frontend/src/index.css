@@ -121,3 +121,28 @@
   mask-composite: exclude;
   pointer-events: none;
 }
+
+@media print {
+  body {
+    background: white !important;
+    color: black !important;
+  }
+  header, aside, footer, main, .print\:hidden, [role="banner"], button {
+    display: none !important;
+  }
+  .fixed.inset-0 {
+    position: absolute !important;
+    background: white !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    overflow: visible !important;
+    z-index: 9999 !important;
+  }
+  .max-w-4xl {
+    max-width: 100% !important;
+    box-shadow: none !important;
+    border: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+}

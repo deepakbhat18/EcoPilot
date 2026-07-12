@@ -94,3 +94,6 @@ app.include_router(settings_notifications_router, prefix=f"{settings.API_V1_STR}
 
 from backend.app.api.v1.reports import router as reports_router
 app.include_router(reports_router, prefix=f"{settings.API_V1_STR}/reports", tags=["Reports"])
+
+from backend.app.api.v1.demo import router as demo_router
+app.include_router(demo_router, prefix=f"{settings.API_V1_STR}/demo", tags=["Demo Mode"])
