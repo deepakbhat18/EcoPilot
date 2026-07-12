@@ -17,16 +17,25 @@ import {
   Target,
   FileSpreadsheet,
   Award,
-  Gift
+  Gift,
+  ChevronLeft,
+  ChevronRight
 } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 
 interface SidebarProps {
   isOpen: boolean;
   onClose: () => void;
+  isCollapsed?: boolean;
+  onToggleCollapse?: () => void;
 }
 
-export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
+export const Sidebar: React.FC<SidebarProps> = ({ 
+  isOpen, 
+  onClose,
+  isCollapsed = false,
+  onToggleCollapse
+}) => {
   const { user } = useAuth();
 
   const navItems = [
@@ -53,8 +62,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
     { name: "Rewards", path: "/rewards", icon: <Gift size={16} /> },
   ];
 
-  const activeStyle = "flex items-center gap-3 px-4 py-2.5 text-sm font-semibold text-primary bg-primary/10 border-r-2 border-r-primary transition-all rounded-r-lg";
-  const inactiveStyle = "flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted/40 transition-all rounded-r-lg";
+  const activeStyle = `flex items-center gap-3 px-4 py-2.5 text-sm font-semibold text-primary bg-primary/10 border-r-2 border-r-primary transition-all rounded-r-lg ${isCollapsed ? "justify-center !pr-4" : ""}`;
+  const inactiveStyle = `flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted/40 transition-all rounded-r-lg ${isCollapsed ? "justify-center !pr-4" : ""}`;
 
   return (
     <>
@@ -67,20 +76,23 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
 
       <aside
         className={`
-          fixed top-0 bottom-0 left-0 z-40 w-64 border-r border-border/60 bg-card text-card-foreground flex flex-col justify-between
-          transition-transform duration-300 ease-in-out lg:translate-x-0
+          fixed top-0 bottom-0 left-0 z-40 border-r border-border/60 bg-card text-card-foreground flex flex-col justify-between
+          transition-all duration-300 ease-in-out lg:translate-x-0
           ${isOpen ? "translate-x-0" : "-translate-x-full"}
+          ${isCollapsed ? "w-20" : "w-64"}
         `}
       >
         <div className="flex-1 overflow-y-auto flex flex-col">
-          <div className="flex items-center justify-between px-6 h-16 border-b border-border/60 shrink-0">
+          <div className={`flex items-center justify-between px-6 h-16 border-b border-border/60 shrink-0 ${isCollapsed ? "justify-center !px-4" : ""}`}>
             <div className="flex items-center gap-2">
-              <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center text-primary-foreground font-extrabold text-lg">
+              <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center text-primary-foreground font-extrabold text-lg shrink-0 shadow-sm shadow-primary/20">
                 E
               </div>
-              <span className="text-xl font-bold tracking-tight bg-gradient-to-r from-primary to-emerald-500 bg-clip-text text-transparent">
-                EcoPilot
-              </span>
+              {!isCollapsed && (
+                <span className="text-xl font-bold tracking-tight bg-gradient-to-r from-primary to-emerald-500 bg-clip-text text-transparent">
+                  EcoPilot
+                </span>
+              )}
             </div>
             <button 
               onClick={onClose} 
@@ -97,18 +109,21 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
                 to={item.path}
                 onClick={onClose}
                 className={({ isActive }) => (isActive ? activeStyle : inactiveStyle)}
+                title={isCollapsed ? item.name : undefined}
               >
                 <span className={item.colorClass}>{item.icon}</span>
-                <span>{item.name}</span>
+                {!isCollapsed && <span>{item.name}</span>}
               </NavLink>
             ))}
           </nav>
 
           <div className="px-6 py-2 shrink-0">
             <div className="h-px bg-border/60" />
-            <h4 className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground/60 mt-4 mb-2">
-              Master Data Management
-            </h4>
+            {!isCollapsed && (
+              <h4 className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground/60 mt-4 mb-2">
+                Master Data Management
+              </h4>
+            )}
           </div>
 
           <nav className="flex flex-col gap-1 pr-4 pb-6 flex-1">
@@ -118,25 +133,38 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
                 to={item.path}
                 onClick={onClose}
                 className={({ isActive }) => (isActive ? activeStyle : inactiveStyle)}
+                title={isCollapsed ? item.name : undefined}
               >
-                <span className="text-muted-foreground/70">{item.icon}</span>
-                <span>{item.name}</span>
+                <span className="text-muted-foreground/75">{item.icon}</span>
+                {!isCollapsed && <span>{item.name}</span>}
               </NavLink>
             ))}
           </nav>
         </div>
 
-        <div className="p-6 border-t border-border/60 shrink-0">
-          <div className="flex items-center gap-3">
-            <div className="h-9 w-9 rounded-full bg-secondary flex items-center justify-center font-bold text-muted-foreground text-sm">
+        <div className="border-t border-border/60 shrink-0">
+          <div className={`p-4 flex items-center gap-3 ${isCollapsed ? "justify-center" : ""}`}>
+            <div className="h-9 w-9 rounded-full bg-secondary flex items-center justify-center font-bold text-muted-foreground text-sm shrink-0 border border-border">
               {user?.first_name ? `${user.first_name[0]}${user.last_name[0]}`.toUpperCase() : "EA"}
             </div>
-            <div className="flex flex-col overflow-hidden">
-              <span className="text-xs font-semibold text-foreground truncate">
-                {user?.first_name ? `${user.first_name} ${user.last_name}` : "ESG Analyst"}
-              </span>
-              <span className="text-[10px] text-muted-foreground truncate">{user?.email || "analyst@ecopilot.com"}</span>
-            </div>
+            {!isCollapsed && (
+              <div className="flex flex-col overflow-hidden">
+                <span className="text-xs font-semibold text-foreground truncate">
+                  {user?.first_name ? `${user.first_name} ${user.last_name}` : "ESG Analyst"}
+                </span>
+                <span className="text-[10px] text-muted-foreground truncate">{user?.email || "analyst@ecopilot.com"}</span>
+              </div>
+            )}
+          </div>
+
+          <div className="hidden lg:flex border-t border-border/40 p-2 justify-end">
+            <button
+              onClick={onToggleCollapse}
+              className="p-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-secondary transition-all w-full flex justify-center"
+              title={isCollapsed ? "Expand Sidebar" : "Collapse Sidebar"}
+            >
+              {isCollapsed ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
+            </button>
           </div>
         </div>
       </aside>
