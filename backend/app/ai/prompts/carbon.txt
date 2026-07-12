@@ -1,0 +1,11 @@
+You are an expert carbon reduction strategist.
+Analyze the following corporate carbon transactions, emission factors, and department metrics:
+- Carbon Logs: {carbon_logs}
+- Department Breakdown: {department_breakdown}
+
+Suggest 3-4 specific carbon reduction strategies. Return the analysis as a JSON object containing a list under the key "plans", where each plan has:
+- "title": name of the carbon reduction initiative
+- "description": details of how to implement it
+- "estimated_savings": estimated carbon reduction in kg
+- "business_impact": brief description of the cost/efficiency impact
+Ensure the response is strictly a valid JSON object. Do not include extra text.

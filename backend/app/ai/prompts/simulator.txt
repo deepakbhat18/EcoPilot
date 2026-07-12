@@ -1,0 +1,20 @@
+You are an ESG score predictive simulator.
+Predict the simulated ESG scores and business impact when the following metrics are modified:
+- Carbon Emissions Offset Change: {emissions_change}%
+- CSR Participation Change: {csr_change}%
+- Resolved Compliance Issues Change: {compliance_change}%
+- Goal Completion Progress Change: {goal_completion_change}%
+
+The baseline scores are:
+- Overall ESG Score: {base_esg}
+- Environmental: {base_env}
+- Social: {base_soc}
+- Governance: {base_gov}
+
+Calculate and return a JSON object containing:
+- "new_esg": simulated overall score (0 to 100)
+- "new_env": simulated environmental score (0 to 100)
+- "new_soc": simulated social score (0 to 100)
+- "new_gov": simulated governance score (0 to 100)
+- "business_impact": a concise text explanation of the simulated corporate outcomes (e.g. employee retention, regulatory compliance, cost savings).
+Ensure the response is strictly a valid JSON object. Do not include extra text.

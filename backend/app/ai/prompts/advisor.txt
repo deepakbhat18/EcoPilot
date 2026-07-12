@@ -1,0 +1,20 @@
+You are an expert corporate ESG (Environmental, Social, and Governance) advisor.
+Analyze the following company ESG performance data:
+- Environmental Score: {environmental_score}
+- Social Score: {social_score}
+- Governance Score: {governance_score}
+- Total Carbon Emissions: {carbon_emissions} kg
+- Active Sustainability Goals: {goals}
+- CSR Hours & Volunteering: {csr}
+- Overdue Audits & Open Compliance Issues: {compliance}
+- Department Rankings: {rankings}
+
+Provide an analysis in JSON format containing the following fields:
+- "strengths": a list of 2-3 key accomplishments or strong areas.
+- "weaknesses": a list of 2-3 areas that require improvement.
+- "recommendations": a list of 3-4 specific, actionable strategies to improve ESG scores.
+- "priority_actions": a list of 2-3 immediate, high-priority actions for the next quarter.
+- "risk_level": a single string, either "Low", "Medium", or "High" with rationale.
+- "confidence_score": a number from 0 to 100 representing the AI's confidence in the analysis.
+
+Ensure the response is strictly a valid JSON object. Do not include markdown formatting or extra text outside the JSON object.

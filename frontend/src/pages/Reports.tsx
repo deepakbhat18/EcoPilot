@@ -33,6 +33,8 @@ export const Reports: React.FC = () => {
   });
 
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+  const [reportExplanation, setReportExplanation] = useState<any | null>(null);
+  const [explaining, setExplaining] = useState(false);
 
   const fetchMetrics = async () => {
     try {
@@ -40,6 +42,20 @@ export const Reports: React.FC = () => {
       setMetrics(res.data);
     } catch (err) {
       showToast("Failed to fetch ESG summary reports", "error");
+    }
+  };
+
+  const explainReportWithAI = async () => {
+    setExplaining(true);
+    try {
+      const docSummary = `ESG Audit Q2 2026. Environmental score: ${metrics.environmental_score}, Social score: ${metrics.social_score}, Governance score: ${metrics.governance_score}. Total emissions: ${metrics.total_emissions_calculated} kg, Total CSR hours: ${metrics.total_csr_logged}, Total Compliance issues: ${metrics.total_compliance_issues}.`;
+      const res = await api.post("/ai/report-explainer", { report_details: docSummary });
+      setReportExplanation(res.data);
+      showToast("AI Explanation generated!", "success");
+    } catch (err: any) {
+      showToast(err.response?.data?.detail || "AI service is temporarily unavailable.", "error");
+    } finally {
+      setExplaining(false);
     }
   };
 
@@ -185,7 +201,14 @@ export const Reports: React.FC = () => {
                 <FileText size={18} className="text-emerald-600" />
                 <span className="font-bold text-sm text-zinc-800">Executive ESG Report PDF Preview</span>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-4">
+                <Button
+                  onClick={explainReportWithAI}
+                  isLoading={explaining}
+                  className="gap-2 bg-gradient-to-tr from-violet-600 to-indigo-600 text-white font-bold hover:shadow-lg transition-all"
+                >
+                  <Sparkles size={14} className="animate-pulse" /> Explain using AI
+                </Button>
                 <Button onClick={handlePrintPdf} className="gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold shadow-md">
                   <Printer size={14} /> Print / Save PDF
                 </Button>
@@ -289,6 +312,39 @@ export const Reports: React.FC = () => {
                       <li>No open critical severity compliance issues are currently outstanding.</li>
                     </ul>
                   </div>
+
+                  {reportExplanation && (
+                    <div className="mt-8 p-6 bg-violet-50 border border-violet-200 rounded-xl flex flex-col gap-4 print:hidden">
+                      <h3 className="text-sm font-bold text-violet-900 flex items-center gap-1.5 border-b border-violet-200 pb-2">
+                        <Sparkles size={16} className="text-violet-600 animate-pulse" />
+                        AI Executive Analysis & Diagnostic
+                      </h3>
+                      <div className="text-xs leading-relaxed text-zinc-800">
+                        <strong className="text-violet-850">Synthesis Summary:</strong>
+                        <p className="mt-1">{reportExplanation.summary}</p>
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-2">
+                        <div className="p-3 bg-white rounded-lg border border-violet-100">
+                          <span className="text-[10px] uppercase font-bold text-red-700">Critical Risks</span>
+                          <ul className="text-[10px] text-zinc-600 list-disc pl-4 mt-1 flex flex-col gap-1">
+                            {reportExplanation.risks.map((r: string, idx: number) => <li key={idx}>{r}</li>)}
+                          </ul>
+                        </div>
+                        <div className="p-3 bg-white rounded-lg border border-violet-100">
+                          <span className="text-[10px] uppercase font-bold text-emerald-700">Key Insights</span>
+                          <ul className="text-[10px] text-zinc-600 list-disc pl-4 mt-1 flex flex-col gap-1">
+                            {reportExplanation.insights.map((ins: string, idx: number) => <li key={idx}>{ins}</li>)}
+                          </ul>
+                        </div>
+                        <div className="p-3 bg-white rounded-lg border border-violet-100">
+                          <span className="text-[10px] uppercase font-bold text-indigo-700">Recommendations</span>
+                          <ul className="text-[10px] text-zinc-600 list-disc pl-4 mt-1 flex flex-col gap-1">
+                            {reportExplanation.recommendations.map((rec: string, idx: number) => <li key={idx}>{rec}</li>)}
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 {/* Signature page */}

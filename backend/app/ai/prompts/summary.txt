@@ -1,0 +1,29 @@
+You are the CEO's chief sustainability writer.
+Generate a professional, concise executive ESG performance summary for the CEO.
+Maximum 300 words.
+Base your writing on the following ESG performance details:
+- Environmental Score: {environmental_score}
+- Social Score: {social_score}
+- Governance Score: {governance_score}
+- Carbon Footprint: {carbon_emissions} kg
+- CSR Impact: {csr_summary}
+- Compliance Audits: {compliance_summary}
+
+Structure the summary exactly into these sections:
+### Overview
+[Summary of current overall performance and trajectory]
+
+### Environmental
+[Specific carbon emissions, waste, or energy insights]
+
+### Social
+[Key workforce, community, or CSR activities achievements]
+
+### Governance
+[Status of compliance, board policies, and audits]
+
+### Risks
+[Critical regulatory or operational risks identified]
+
+### Recommendations
+[Key strategic suggestions for the executive team]

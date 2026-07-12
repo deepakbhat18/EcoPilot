@@ -19,7 +19,8 @@ import {
   Award,
   Gift,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  Sparkles
 } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 
@@ -44,6 +45,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
     { name: "Social", path: "/social", icon: <Users size={18} />, colorClass: "text-esg-social" },
     { name: "Governance", path: "/governance", icon: <Building size={18} />, colorClass: "text-esg-governance" },
     { name: "Gamification", path: "/gamification", icon: <Trophy size={18} />, colorClass: "text-esg-gamification" },
+    { name: "AI Insights", path: "/ai-insights", icon: <Sparkles size={18} className="text-violet-500 animate-pulse" /> },
     { name: "Reports", path: "/reports", icon: <FileText size={18} /> },
     ...(user && ["admin", "esg manager", "department manager"].includes(user.role?.name?.toLowerCase() || "") 
       ? [{ name: "Settings", path: "/settings", icon: <Settings size={18} /> }] 

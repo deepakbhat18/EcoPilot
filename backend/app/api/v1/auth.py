@@ -32,7 +32,7 @@ async def refresh(payload: RefreshTokenRequest, db: Session = Depends(get_db)) -
 
 @router.get("/me", response_model=UserOut)
 async def get_me(current_user: User = Depends(get_current_user)) -> UserOut:
-    return current_user
+    return UserOut.model_validate(current_user)
 
 @router.put("/change-password", status_code=status.HTTP_204_NO_CONTENT)
 async def change_password(

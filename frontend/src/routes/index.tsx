@@ -16,6 +16,7 @@ import { Login } from "../pages/Login";
 import { ForgotPassword } from "../pages/ForgotPassword";
 import { NotFound } from "../pages/NotFound";
 import { MasterDataManager } from "../pages/MasterDataManager";
+import { AIInsights } from "../pages/AI/AIInsights";
 
 export const AppRoutes: React.FC = () => {
   return (
@@ -32,6 +33,7 @@ export const AppRoutes: React.FC = () => {
           <Route path="/social" element={<Social />} />
           <Route path="/governance" element={<Governance />} />
           <Route path="/gamification" element={<Gamification />} />
+          <Route path="/ai-insights" element={<AIInsights />} />
           <Route path="/reports" element={<Reports />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/profile" element={<Profile />} />
