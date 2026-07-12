@@ -14,7 +14,6 @@ export const Navbar: React.FC<NavbarProps> = ({ onMenuToggle }) => {
 
   return (
     <header className="sticky top-0 z-30 flex h-16 w-full items-center justify-between border-b border-border/60 bg-background/80 backdrop-blur-md px-6">
-      {}
       <div className="flex items-center gap-4">
         <button
           onClick={onMenuToggle}
@@ -26,7 +25,6 @@ export const Navbar: React.FC<NavbarProps> = ({ onMenuToggle }) => {
         <Breadcrumb />
       </div>
 
-      {}
       <div className="flex items-center gap-3">
         <button
           onClick={toggleTheme}
@@ -48,8 +46,12 @@ export const Navbar: React.FC<NavbarProps> = ({ onMenuToggle }) => {
 
         <div className="flex items-center gap-2">
           <div className="hidden md:flex flex-col text-right">
-            <span className="text-xs font-semibold text-foreground">{user?.full_name || "ESG Analyst"}</span>
-            <span className="text-[10px] text-muted-foreground capitalize">{user?.role || "analyst"}</span>
+            <span className="text-xs font-semibold text-foreground">
+              {user?.first_name ? `${user.first_name} ${user.last_name}` : "ESG Analyst"}
+            </span>
+            <span className="text-[10px] text-muted-foreground capitalize">
+              {user?.role?.name || "analyst"}
+            </span>
           </div>
           
           <button

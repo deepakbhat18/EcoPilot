@@ -2,16 +2,17 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { Input } from "../components/Input";
 import { Button } from "../components/Button";
 import { ShieldCheck } from "lucide-react";
 import { showToast } from "../components/Toast";
 
-
 const loginSchema = z.object({
   email: z.string().min(1, "Email is required").email("Please enter a valid email address"),
   password: z.string().min(8, "Password must be at least 8 characters long"),
+  rememberMe: z.boolean().optional(),
 });
 
 type LoginFormValues = z.infer<typeof loginSchema>;
@@ -29,6 +30,7 @@ export const Login: React.FC = () => {
     defaultValues: {
       email: "",
       password: "",
+      rememberMe: false,
     },
   });
 
@@ -39,7 +41,6 @@ export const Login: React.FC = () => {
       showToast("Signed in successfully. Welcome back to EcoPilot!", "success");
     } catch (error: any) {
       console.error("Login failed:", error);
-      
       showToast(error.response?.data?.error?.message || "Invalid login credentials.", "error");
     } finally {
       setIsSubmitting(false);
@@ -48,7 +49,6 @@ export const Login: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-background flex flex-col items-center justify-center p-4">
-      {}
       <div className="flex items-center gap-2 mb-6 animate-fadeIn">
         <div className="h-10 w-10 rounded-xl bg-primary flex items-center justify-center text-primary-foreground font-extrabold text-xl shadow-md">
           E
@@ -58,7 +58,6 @@ export const Login: React.FC = () => {
         </span>
       </div>
 
-      {}
       <div className="w-full max-w-md bg-card text-card-foreground border border-border/80 shadow-premium dark:shadow-premium-dark rounded-2xl p-8 animate-slideIn">
         <div className="flex flex-col gap-1 mb-6 text-center">
           <h2 className="text-xl font-bold">Sign In</h2>
@@ -84,12 +83,25 @@ export const Login: React.FC = () => {
             {...register("password")}
           />
 
+          <div className="flex items-center justify-between text-xs mt-1 mb-2">
+            <label className="flex items-center gap-1.5 cursor-pointer text-muted-foreground hover:text-foreground">
+              <input
+                type="checkbox"
+                className="rounded border-border bg-background text-primary focus:ring-primary h-3.5 w-3.5"
+                {...register("rememberMe")}
+              />
+              <span>Remember Me</span>
+            </label>
+            <Link to="/forgot-password" className="text-primary hover:underline font-medium">
+              Forgot Password?
+            </Link>
+          </div>
+
           <Button type="submit" variant="primary" isLoading={isSubmitting} className="w-full mt-2">
             Sign In to Dashboard
           </Button>
         </form>
 
-        {/* Demo Credentials Box */}
         <div className="mt-6 p-4 border border-border bg-secondary/30 rounded-xl text-xs flex flex-col gap-1">
           <div className="flex items-center gap-1.5 font-semibold text-primary mb-1">
             <ShieldCheck size={14} />

@@ -11,6 +11,7 @@ import {
   User,
   X
 } from "lucide-react";
+import { useAuth } from "../context/AuthContext";
 
 interface SidebarProps {
   isOpen: boolean;
@@ -18,6 +19,8 @@ interface SidebarProps {
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
+  const { user } = useAuth();
+
   const navItems = [
     { name: "Dashboard", path: "/", icon: <LayoutDashboard size={18} /> },
     { name: "Environmental", path: "/environmental", icon: <Leaf size={18} />, colorClass: "text-esg-environmental" },
@@ -25,7 +28,9 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
     { name: "Governance", path: "/governance", icon: <Building size={18} />, colorClass: "text-esg-governance" },
     { name: "Gamification", path: "/gamification", icon: <Trophy size={18} />, colorClass: "text-esg-gamification" },
     { name: "Reports", path: "/reports", icon: <FileText size={18} /> },
-    { name: "Settings", path: "/settings", icon: <Settings size={18} /> },
+    ...(user && ["admin", "esg manager", "department manager"].includes(user.role?.name?.toLowerCase() || "") 
+      ? [{ name: "Settings", path: "/settings", icon: <Settings size={18} /> }] 
+      : []),
     { name: "Profile", path: "/profile", icon: <User size={18} /> },
   ];
 
@@ -34,7 +39,6 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
 
   return (
     <>
-      {}
       {isOpen && (
         <div 
           onClick={onClose} 
@@ -42,7 +46,6 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
         />
       )}
 
-      {}
       <aside
         className={`
           fixed top-0 bottom-0 left-0 z-40 w-64 border-r border-border/60 bg-card text-card-foreground flex flex-col justify-between
@@ -51,7 +54,6 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
         `}
       >
         <div>
-          {}
           <div className="flex items-center justify-between px-6 h-16 border-b border-border/60">
             <div className="flex items-center gap-2">
               <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center text-primary-foreground font-extrabold text-lg">
@@ -69,7 +71,6 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
             </button>
           </div>
 
-          {}
           <nav className="flex flex-col gap-1 pr-4 py-6">
             {navItems.map((item) => (
               <NavLink
@@ -85,15 +86,16 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
           </nav>
         </div>
 
-        {}
         <div className="p-6 border-t border-border/60">
           <div className="flex items-center gap-3">
             <div className="h-9 w-9 rounded-full bg-secondary flex items-center justify-center font-bold text-muted-foreground text-sm">
-              EA
+              {user?.first_name ? `${user.first_name[0]}${user.last_name[0]}`.toUpperCase() : "EA"}
             </div>
             <div className="flex flex-col overflow-hidden">
-              <span className="text-xs font-semibold text-foreground truncate">ESG Analyst</span>
-              <span className="text-[10px] text-muted-foreground truncate">analyst@ecopilot.com</span>
+              <span className="text-xs font-semibold text-foreground truncate">
+                {user?.first_name ? `${user.first_name} ${user.last_name}` : "ESG Analyst"}
+              </span>
+              <span className="text-[10px] text-muted-foreground truncate">{user?.email || "analyst@ecopilot.com"}</span>
             </div>
           </div>
         </div>

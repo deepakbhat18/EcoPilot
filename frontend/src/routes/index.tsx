@@ -4,7 +4,6 @@ import { GuestLayout } from "../layouts/GuestLayout";
 import { ProtectedRouteLayout } from "../layouts/ProtectedRouteLayout";
 import { PageLayout } from "../layouts/PageLayout";
 
-
 import { Dashboard } from "../pages/Dashboard";
 import { Environmental } from "../pages/Environmental";
 import { Social } from "../pages/Social";
@@ -14,17 +13,17 @@ import { Reports } from "../pages/Reports";
 import { Settings } from "../pages/Settings";
 import { Profile } from "../pages/Profile";
 import { Login } from "../pages/Login";
+import { ForgotPassword } from "../pages/ForgotPassword";
 import { NotFound } from "../pages/NotFound";
 
 export const AppRoutes: React.FC = () => {
   return (
     <Routes>
-      {}
       <Route element={<GuestLayout />}>
         <Route path="/login" element={<Login />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
       </Route>
 
-      {}
       <Route element={<ProtectedRouteLayout />}>
         <Route element={<PageLayout />}>
           <Route path="/" element={<Dashboard />} />
@@ -38,7 +37,6 @@ export const AppRoutes: React.FC = () => {
         </Route>
       </Route>
 
-      {}
       <Route path="/404" element={<NotFound />} />
       <Route path="*" element={<Navigate to="/404" replace />} />
     </Routes>

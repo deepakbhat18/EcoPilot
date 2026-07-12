@@ -1,12 +1,25 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { api, API_ENDPOINTS } from "../services/api";
 
+export interface Role {
+  id: number;
+  name: string;
+  description?: string;
+  permissions: string[];
+}
+
 export interface User {
   id: number;
+  first_name: string;
+  last_name: string;
   email: string;
-  full_name: string;
-  role: string;
+  phone?: string;
+  department_id?: number;
+  role_id: number;
+  profile_image?: string;
+  status: string;
   is_active: boolean;
+  role?: Role;
 }
 
 interface AuthContextType {
@@ -26,7 +39,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  
   useEffect(() => {
     const fetchCurrentUser = async () => {
       const token = localStorage.getItem("ecopilot_access_token");
@@ -39,7 +51,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setUser(response.data);
         setIsAuthenticated(true);
       } catch (err) {
-        
         console.error("Session sync failed:", err);
       } finally {
         setIsLoading(false);
@@ -48,7 +59,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     fetchCurrentUser();
 
-    
     const handleLogoutEvent = () => logout();
     window.addEventListener("auth-logout", handleLogoutEvent);
 
@@ -65,7 +75,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       
       localStorage.setItem("ecopilot_access_token", access_token);
       localStorage.setItem("ecopilot_refresh_token", refresh_token);
-      
       
       const userResponse = await api.get(API_ENDPOINTS.ME);
       setUser(userResponse.data);
@@ -86,24 +95,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const hasPermission = (permission: string): boolean => {
-    if (!user) return false;
-    
-    const rolePermissions: Record<string, string[]> = {
-      admin: ["read:all", "write:all", "delete:all"],
-      manager: ["read:all", "write:all"],
-      analyst: ["read:all", "write:environmental", "write:social", "write:governance"],
-      viewer: ["read:all"]
-    };
-
-    const perms = rolePermissions[user.role] || [];
+    if (!user || !user.role) return false;
+    const perms = user.role.permissions || [];
     if (perms.includes("read:all") && permission.startsWith("read:")) return true;
     if (perms.includes("write:all") && permission.startsWith("write:")) return true;
     return perms.includes(permission);
   };
 
   const hasRole = (roles: string[]): boolean => {
-    if (!user) return false;
-    return roles.includes(user.role);
+    if (!user || !user.role) return false;
+    const userRoleName = user.role.name.toLowerCase();
+    return roles.map(r => r.toLowerCase()).includes(userRoleName);
   };
 
   return (

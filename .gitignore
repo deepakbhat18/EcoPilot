@@ -45,3 +45,4 @@ Thumbs.db
 *.sln
 *.swp
 strip_all_comments.py
+*.db

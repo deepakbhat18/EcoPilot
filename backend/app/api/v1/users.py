@@ -1,39 +1,31 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from typing import Dict, Any
-
 from backend.app.database.session import get_db
 from backend.app.services.user import UserService
-from backend.app.dependencies.auth import get_current_user, RoleChecker, PermissionChecker
+from backend.app.dependencies.auth import get_current_user, RoleChecker
+from backend.app.schemas.user import UserOut
+from backend.app.models.user import User
 
 router = APIRouter()
 
-@router.get("/me", response_model=Dict[str, Any])
+@router.get("/me", response_model=UserOut)
 async def get_my_profile(
-    current_user: dict = Depends(get_current_user)
-) -> Dict[str, Any]:
-
+    current_user: User = Depends(get_current_user)
+) -> UserOut:
     return current_user
 
 @router.get(
     "/{user_id}", 
-    response_model=Dict[str, Any],
+    response_model=UserOut,
     dependencies=[Depends(RoleChecker(["admin", "manager"]))]
 )
 async def get_user_by_id(
     user_id: int,
     db: Session = Depends(get_db),
-    current_user: dict = Depends(get_current_user)
-) -> Dict[str, Any]:
-
+    current_user: User = Depends(get_current_user)
+) -> UserOut:
     user_service = UserService(db)
-    profile = user_service.get_profile(user_id)
-
-
-    return {
-        "id": user_id,
-        "email": f"user{user_id}@verdexa.com",
-        "role": "analyst",
-        "is_active": True,
-        "arch_status": "Success - Routed via API -> Service -> Repository"
-    }
+    user = user_service.get_by_id(user_id)
+    if not user:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+    return user
