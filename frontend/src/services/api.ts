@@ -1,5 +1,5 @@
-import axios, { AxiosError, InternalAxiosRequestConfig } from "axios";
-
+import axios, { AxiosError } from "axios";
+import type { InternalAxiosRequestConfig } from "axios";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8000/api/v1";
 
@@ -9,7 +9,6 @@ export const api = axios.create({
     "Content-Type": "application/json",
   },
 });
-
 
 api.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
@@ -24,19 +23,16 @@ api.interceptors.request.use(
   }
 );
 
-
 api.interceptors.response.use(
   (response) => response,
   async (error: AxiosError) => {
     const originalRequest = error.config as InternalAxiosRequestConfig & { _retry?: boolean };
 
-    
     if (error.response?.status === 401 && originalRequest && !originalRequest._retry) {
       originalRequest._retry = true;
       try {
         const refreshToken = localStorage.getItem("ecopilot_refresh_token");
         if (refreshToken) {
-          
           const response = await axios.post(`${API_URL}/auth/refresh`, {
             refresh_token: refreshToken,
           });
@@ -53,7 +49,6 @@ api.interceptors.response.use(
           return api(originalRequest);
         }
       } catch (refreshError) {
-        
         localStorage.removeItem("ecopilot_access_token");
         localStorage.removeItem("ecopilot_refresh_token");
         window.dispatchEvent(new CustomEvent("auth-logout"));
@@ -61,7 +56,6 @@ api.interceptors.response.use(
       }
     }
 
-    
     const errorData = (error.response?.data as any)?.error;
     const message = errorData?.message || error.message || "A system network error occurred.";
     const code = errorData?.code || "NETWORK_ERROR";
@@ -73,7 +67,6 @@ api.interceptors.response.use(
     return Promise.reject(error);
   }
 );
-
 
 export const API_ENDPOINTS = {
   LOGIN: "/auth/login",
