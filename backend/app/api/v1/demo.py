@@ -7,6 +7,7 @@ from backend.app.dependencies.auth import get_current_user
 from backend.app.models.user import User
 from backend.app.models.role import Role
 from backend.app.models.department import Department
+from backend.app.models.category import Category
 from backend.app.models.emission_factor import EmissionFactor
 from backend.app.models.carbon_transaction import CarbonTransaction
 from backend.app.models.social import CSRActivity, CSRParticipation, Training, TrainingCompletion, DiversityMetric
@@ -44,16 +45,22 @@ async def seed_demo_data(
 
     # 1. Departments
     depts = [
-        {"id": 1, "name": "HQ London", "description": "Global corporate headquarters"},
-        {"id": 2, "name": "San Francisco Hub", "description": "Tech and design innovation center"},
-        {"id": 3, "name": "Tokyo Operations", "description": "APAC region operations & logistics"},
-        {"id": 4, "name": "Berlin Factory", "description": "Smart assembly and battery manufacturing"},
-        {"id": 5, "name": "Sydney Logistics", "description": "Oceania distribution and warehousing"}
+        {"id": 1, "name": "HQ London", "code": "HQ-LDN", "description": "Global corporate headquarters"},
+        {"id": 2, "name": "San Francisco Hub", "code": "SF-HUB", "description": "Tech and design innovation center"},
+        {"id": 3, "name": "Tokyo Operations", "code": "TOK-OPS", "description": "APAC region operations & logistics"},
+        {"id": 4, "name": "Berlin Factory", "code": "BER-FAC", "description": "Smart assembly and battery manufacturing"},
+        {"id": 5, "name": "Sydney Logistics", "code": "SYD-LOG", "description": "Oceania distribution and warehousing"}
     ]
     for d in depts:
         existing = db.query(Department).filter(Department.id == d["id"]).first()
         if not existing:
-            new_d = Department(id=d["id"], name=d["name"], description=d["description"], status="active")
+            new_d = Department(
+                id=d["id"], 
+                name=d["name"], 
+                code=d["code"], 
+                description=d["description"], 
+                status="active"
+            )
             db.add(new_d)
     db.commit()
 
@@ -112,6 +119,27 @@ async def seed_demo_data(
             users_seeded.append(existing)
     db.commit()
 
+    # 3.5. Categories (Scope 1, 2, 3)
+    categories = [
+        {"name": "Scope 1 (Direct)", "type": "environmental", "description": "Direct greenhouse gas emissions from sources owned or controlled by the organization."},
+        {"name": "Scope 2 (Indirect)", "type": "environmental", "description": "Indirect greenhouse gas emissions from the generation of purchased electricity, heating, or cooling."},
+        {"name": "Scope 3 (Indirect)", "type": "environmental", "description": "Other indirect emissions in the value chain, both upstream and downstream."}
+    ]
+    categories_map = {}
+    for c in categories:
+        existing_cat = db.query(Category).filter(Category.name == c["name"]).first()
+        if not existing_cat:
+            existing_cat = Category(
+                name=c["name"],
+                type=c["type"],
+                description=c["description"],
+                status="active"
+            )
+            db.add(existing_cat)
+            db.commit()
+            db.refresh(existing_cat)
+        categories_map[c["name"]] = existing_cat.id
+
     # 4. Master Data: Emission Factors
     factors = [
         {"name": "Electricity Grid Scope 2", "category": "Scope 2 (Indirect)", "factor": 0.47, "unit": "kWh"},
@@ -123,7 +151,15 @@ async def seed_demo_data(
     for f in factors:
         existing = db.query(EmissionFactor).filter(EmissionFactor.name == f["name"]).first()
         if not existing:
-            existing = EmissionFactor(name=f["name"], category=f["category"], factor=f["factor"], unit=f["unit"], status="active")
+            cat_id = categories_map[f["category"]]
+            existing = EmissionFactor(
+                name=f["name"],
+                category_id=cat_id,
+                source="EPA GHG Emissions Factors Hub",
+                factor=f["factor"],
+                unit=f["unit"],
+                status="active"
+            )
             db.add(existing)
             db.commit()
             db.refresh(existing)

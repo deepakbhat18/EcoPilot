@@ -394,8 +394,8 @@ export const Dashboard: React.FC = () => {
                     </tr>
                   </thead>
                   <tbody className="text-sm divide-y divide-border/40">
-                    {envData.recent_transactions.slice(0, 4).map((tx: any) => (
-                      <tr key={tx.id} className="hover:bg-muted/20 transition-colors">
+                    {envData.recent_transactions.slice(0, 4).map((tx: any, idx: number) => (
+                      <tr key={tx.id || `tx-${idx}`} className="hover:bg-muted/20 transition-colors">
                         <td className="py-3.5 font-medium text-foreground">{tx.department}</td>
                         <td className="py-3.5 text-muted-foreground">{tx.emission_factor}</td>
                         <td className="py-3.5 text-right font-semibold text-foreground">{Number(tx.calculated_carbon || 0).toLocaleString()} kg</td>
@@ -433,7 +433,7 @@ export const Dashboard: React.FC = () => {
             <div className="flex flex-col gap-3">
               {envData.insights && envData.insights.length > 0 ? (
                 envData.insights.map((insight: string, idx: number) => (
-                  <div key={idx} className="flex gap-3 items-start p-3 bg-muted/40 border border-border rounded-xl">
+                  <div key={`insight-${idx}`} className="flex gap-3 items-start p-3 bg-muted/40 border border-border rounded-xl">
                     <HelpCircle size={16} className="text-primary shrink-0 mt-0.5" />
                     <span className="text-xs text-muted-foreground leading-normal">{insight}</span>
                   </div>
@@ -457,7 +457,7 @@ export const Dashboard: React.FC = () => {
             <div className="flex flex-col gap-3">
               {leaderboard && leaderboard.length > 0 ? (
                 leaderboard.slice(0, 5).map((userL: any, idx: number) => (
-                  <div key={userL.user_id} className="flex justify-between items-center p-2.5 hover:bg-muted/30 rounded-xl transition-colors">
+                  <div key={userL.user_id || `leader-${idx}`} className="flex justify-between items-center p-2.5 hover:bg-muted/30 rounded-xl transition-colors">
                     <div className="flex items-center gap-3">
                       <span className="font-bold text-xs text-muted-foreground w-4">{idx + 1}</span>
                       <div className="h-8 w-8 rounded-full bg-secondary flex items-center justify-center font-bold text-muted-foreground text-xs uppercase">
