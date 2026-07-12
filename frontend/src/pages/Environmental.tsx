@@ -9,7 +9,6 @@ import {
   Search,
   ChevronDown,
   ChevronUp,
-  MoreVertical,
   Edit2,
   Trash2,
   ChevronLeft,
@@ -31,7 +30,6 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
-  Legend,
   LineChart,
   Line,
   PieChart,
@@ -50,8 +48,8 @@ import { Input } from "../components/Input";
 import { Select } from "../components/Select";
 
 const txSchema = z.object({
-  department_id: z.coerce.number({ invalid_type_error: "Department is required" }),
-  emission_factor_id: z.coerce.number({ invalid_type_error: "Emission Factor is required" }),
+  department_id: z.coerce.number(),
+  emission_factor_id: z.coerce.number(),
   quantity: z.coerce.number().gt(0, "Quantity must be greater than 0"),
   source: z.string().min(2, "Source is required"),
   reference: z.string().min(2, "Reference code is required"),
@@ -360,7 +358,7 @@ export const Environmental: React.FC = () => {
                       <YAxis stroke="#9ca3af" fontSize={11} tickLine={false} />
                       <Tooltip />
                       <Bar dataKey="value" fill="#3b82f6" radius={[4, 4, 0, 0]}>
-                        {dashboard.bar_chart.map((entry: any, index: number) => (
+                        {dashboard.bar_chart.map((_entry: any, index: number) => (
                           <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                         ))}
                       </Bar>
@@ -391,7 +389,7 @@ export const Environmental: React.FC = () => {
                           paddingAngle={3}
                           dataKey="value"
                         >
-                          {dashboard.pie_chart.map((entry: any, index: number) => (
+                          {dashboard.pie_chart.map((_entry: any, index: number) => (
                             <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                           ))}
                         </Pie>
@@ -664,13 +662,14 @@ export const Environmental: React.FC = () => {
               render={({ field }) => (
                 <Select
                   {...field}
+                  value={field.value !== undefined && field.value !== null ? String(field.value) : ""}
                   label="Department Name"
                   required
                   options={[
                     { value: "", label: "Select a Department" },
-                    ...departments.map((d) => ({ value: d.id, label: d.name })),
+                    ...departments.map((d) => ({ value: String(d.id), label: d.name })),
                   ]}
-                  error={errors.department_id?.message as string}
+                  error={(errors as any).department_id?.message as string}
                 />
               )}
             />
@@ -681,13 +680,14 @@ export const Environmental: React.FC = () => {
               render={({ field }) => (
                 <Select
                   {...field}
+                  value={field.value !== undefined && field.value !== null ? String(field.value) : ""}
                   label="Emission Factor Target"
                   required
                   options={[
                     { value: "", label: "Select an Emission Factor" },
-                    ...emissionFactors.map((f) => ({ value: f.id, label: `${f.name} (${f.factor} ${f.unit})` })),
+                    ...emissionFactors.map((f) => ({ value: String(f.id), label: `${f.name} (${f.factor} ${f.unit})` })),
                   ]}
-                  error={errors.emission_factor_id?.message as string}
+                  error={(errors as any).emission_factor_id?.message as string}
                 />
               )}
             />
@@ -698,11 +698,12 @@ export const Environmental: React.FC = () => {
               render={({ field }) => (
                 <Input
                   {...field}
+                  value={field.value !== undefined && field.value !== null ? String(field.value) : ""}
                   type="number"
                   step="any"
                   label="Quantity Consumed"
                   required
-                  error={errors.quantity?.message as string}
+                  error={(errors as any).quantity?.message as string}
                 />
               )}
             />

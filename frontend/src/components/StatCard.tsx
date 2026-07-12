@@ -9,6 +9,7 @@ interface StatCardProps {
   changeLabel?: string;
   icon?: React.ReactNode;
   variant?: "environmental" | "social" | "governance" | "gamification" | "default";
+  className?: string;
 }
 
 export const StatCard: React.FC<StatCardProps> = ({
@@ -18,6 +19,7 @@ export const StatCard: React.FC<StatCardProps> = ({
   changeLabel = "vs last quarter",
   icon,
   variant = "default",
+  className,
 }) => {
   const borders = {
     default: "border-l-4 border-l-border",
@@ -62,7 +64,7 @@ export const StatCard: React.FC<StatCardProps> = ({
   };
 
   return (
-    <Card hoverable className={`${borders[variant]} flex flex-col justify-between min-h-[120px]`}>
+    <Card hoverable className={`${borders[variant]} flex flex-col justify-between min-h-[120px] ${className || ""}`}>
       <div className="flex justify-between items-start">
         <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">{title}</span>
         {icon && <div className={`${textColors[variant]}`}>{icon}</div>}

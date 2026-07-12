@@ -19,11 +19,15 @@ export const Profile: React.FC = () => {
         <Card className="flex flex-col gap-5">
           <div className="flex items-center gap-4 border-b border-border/60 pb-5">
             <div className="h-16 w-16 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-2xl">
-              {user?.full_name?.charAt(0) || "A"}
+              {user?.first_name?.charAt(0) || "A"}
             </div>
             <div className="flex flex-col">
-              <span className="text-lg font-bold">{user?.full_name || "Senior ESG Analyst"}</span>
-              <span className="text-sm text-muted-foreground capitalize">{user?.role || "analyst"} Role</span>
+              <span className="text-lg font-bold">
+                {user ? `${user.first_name} ${user.last_name}` : "Senior ESG Analyst"}
+              </span>
+              <span className="text-sm text-muted-foreground capitalize">
+                {user?.role?.name || "analyst"} Role
+              </span>
             </div>
           </div>
 
@@ -40,7 +44,7 @@ export const Profile: React.FC = () => {
               <Shield size={16} className="text-muted-foreground" />
               <div className="flex flex-col">
                 <span className="text-[10px] uppercase font-semibold text-muted-foreground">Account Role</span>
-                <span className="capitalize font-medium">{user?.role || "admin"}</span>
+                <span className="capitalize font-medium">{user?.role?.name || "admin"}</span>
               </div>
             </div>
 

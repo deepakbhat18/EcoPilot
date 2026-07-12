@@ -9,3 +9,25 @@ from backend.app.schemas.policy import PolicyBase, PolicyCreate, PolicyUpdate, P
 from backend.app.schemas.badge import BadgeBase, BadgeCreate, BadgeUpdate, BadgeOut
 from backend.app.schemas.reward import RewardBase, RewardCreate, RewardUpdate, RewardOut
 from backend.app.schemas.carbon_transaction import CarbonTransactionBase, CarbonTransactionCreate, CarbonTransactionUpdate, CarbonTransactionOut
+from backend.app.schemas.social import (
+    CSRActivityBase, CSRActivityCreate, CSRActivityUpdate, CSRActivityOut,
+    CSRParticipationBase, CSRParticipationCreate, CSRParticipationUpdate, CSRParticipationOut,
+    TrainingBase, TrainingCreate, TrainingUpdate, TrainingOut,
+    TrainingCompletionBase, TrainingCompletionCreate, TrainingCompletionOut,
+    DiversityMetricBase, DiversityMetricCreate, DiversityMetricOut
+)
+from backend.app.schemas.governance import (
+    PolicyAcknowledgementBase, PolicyAcknowledgementCreate, PolicyAcknowledgementOut,
+    AuditBase, AuditCreate, AuditUpdate, AuditOut,
+    ComplianceIssueBase, ComplianceIssueCreate, ComplianceIssueUpdate, ComplianceIssueOut
+)
+from backend.app.schemas.gamification import (
+    ChallengeBase, ChallengeCreate, ChallengeUpdate, ChallengeOut,
+    ChallengeParticipationBase, ChallengeParticipationCreate, ChallengeParticipationUpdate, ChallengeParticipationOut,
+    RewardRedemptionBase, RewardRedemptionCreate, RewardRedemptionUpdate, RewardRedemptionOut,
+    UserBadgeBase, UserBadgeCreate, UserBadgeOut
+)
+from backend.app.schemas.settings_notifications import (
+    SettingBase, SettingCreate, SettingUpdate, SettingOut,
+    NotificationBase, NotificationCreate, NotificationUpdate, NotificationOut
+)

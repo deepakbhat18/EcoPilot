@@ -22,6 +22,8 @@ class UserBase(BaseModel):
     profile_image: Optional[str] = None
     status: str = "active"
     is_active: bool = True
+    xp_points: int = 0
+    points_balance: int = 0
 
     @field_validator('email')
     @classmethod

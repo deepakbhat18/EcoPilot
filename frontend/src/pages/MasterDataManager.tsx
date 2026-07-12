@@ -16,14 +16,11 @@ import {
   Search,
   ChevronDown,
   ChevronUp,
-  MoreVertical,
   Edit2,
   Trash2,
   ChevronLeft,
   ChevronRight,
-  Home,
-  CheckCircle2,
-  AlertCircle
+  Home
 } from "lucide-react";
 import { api } from "../services/api";
 import { Drawer } from "../components/Drawer";
@@ -112,7 +109,7 @@ export const MasterDataManager: React.FC<MasterDataManagerProps> = ({ entity }) 
           validationSchema: z.object({
             name: z.string().min(2, "Name is required"),
             source: z.string().min(2, "Source is required"),
-            category_id: z.coerce.number({ invalid_type_error: "Category is required" }),
+            category_id: z.coerce.number(),
             factor: z.coerce.number().min(0, "Factor must be positive"),
             unit: z.string().min(1, "Unit is required"),
             status: z.string().default("active"),
@@ -128,8 +125,8 @@ export const MasterDataManager: React.FC<MasterDataManagerProps> = ({ entity }) 
           tableHeaders: ["Product Name", "Category", "Emission Factor", "Carbon Rating", "Actions"],
           validationSchema: z.object({
             product_name: z.string().min(2, "Product name is required"),
-            category_id: z.coerce.number({ invalid_type_error: "Category is required" }),
-            emission_factor_id: z.coerce.number({ invalid_type_error: "Emission factor is required" }),
+            category_id: z.coerce.number(),
+            emission_factor_id: z.coerce.number(),
             carbon_rating: z.string().min(1, "Rating is required"),
             description: z.string().optional().or(z.literal("")),
           })
@@ -670,20 +667,38 @@ export const MasterDataManager: React.FC<MasterDataManagerProps> = ({ entity }) 
                   name="name"
                   control={control}
                   render={({ field }) => (
-                    <Input {...field} label="Department Name" required error={errors.name?.message as string} />
+                    <Input
+                      {...field}
+                      value={field.value !== undefined && field.value !== null ? String(field.value) : ""}
+                      label="Department Name"
+                      required
+                      error={(errors as any).name?.message as string}
+                    />
                   )}
                 />
                 <Controller
                   name="code"
                   control={control}
                   render={({ field }) => (
-                    <Input {...field} label="Department Code" required error={errors.code?.message as string} />
+                    <Input
+                      {...field}
+                      value={field.value !== undefined && field.value !== null ? String(field.value) : ""}
+                      label="Department Code"
+                      required
+                      error={(errors as any).code?.message as string}
+                    />
                   )}
                 />
                 <Controller
                   name="head"
                   control={control}
-                  render={({ field }) => <Input {...field} label="Department Head (Full Name)" />}
+                  render={({ field }) => (
+                    <Input
+                      {...field}
+                      value={field.value !== undefined && field.value !== null ? String(field.value) : ""}
+                      label="Department Head (Full Name)"
+                    />
+                  )}
                 />
               </>
             )}
@@ -694,7 +709,13 @@ export const MasterDataManager: React.FC<MasterDataManagerProps> = ({ entity }) 
                   name="name"
                   control={control}
                   render={({ field }) => (
-                    <Input {...field} label="Category Name" required error={errors.name?.message as string} />
+                    <Input
+                      {...field}
+                      value={field.value !== undefined && field.value !== null ? String(field.value) : ""}
+                      label="Category Name"
+                      required
+                      error={(errors as any).name?.message as string}
+                    />
                   )}
                 />
                 <Controller
@@ -703,6 +724,7 @@ export const MasterDataManager: React.FC<MasterDataManagerProps> = ({ entity }) 
                   render={({ field }) => (
                     <Select
                       {...field}
+                      value={field.value !== undefined && field.value !== null ? String(field.value) : ""}
                       label="Category Scope Type"
                       required
                       options={[
@@ -710,7 +732,7 @@ export const MasterDataManager: React.FC<MasterDataManagerProps> = ({ entity }) 
                         { value: "social", label: "Social" },
                         { value: "governance", label: "Governance" },
                       ]}
-                      error={errors.type?.message as string}
+                      error={(errors as any).type?.message as string}
                     />
                   )}
                 />
@@ -723,7 +745,13 @@ export const MasterDataManager: React.FC<MasterDataManagerProps> = ({ entity }) 
                   name="name"
                   control={control}
                   render={({ field }) => (
-                    <Input {...field} label="Emission Factor Name" required error={errors.name?.message as string} />
+                    <Input
+                      {...field}
+                      value={field.value !== undefined && field.value !== null ? String(field.value) : ""}
+                      label="Emission Factor Name"
+                      required
+                      error={(errors as any).name?.message as string}
+                    />
                   )}
                 />
                 <Controller
@@ -732,13 +760,14 @@ export const MasterDataManager: React.FC<MasterDataManagerProps> = ({ entity }) 
                   render={({ field }) => (
                     <Select
                       {...field}
+                      value={field.value !== undefined && field.value !== null ? String(field.value) : ""}
                       label="Link to Category"
                       required
                       options={[
                         { value: "", label: "Select a Category" },
-                        ...categories.map((c) => ({ value: c.id, label: c.name })),
+                        ...categories.map((c) => ({ value: String(c.id), label: c.name })),
                       ]}
-                      error={errors.category_id?.message as string}
+                      error={(errors as any).category_id?.message as string}
                     />
                   )}
                 />
@@ -748,11 +777,12 @@ export const MasterDataManager: React.FC<MasterDataManagerProps> = ({ entity }) 
                   render={({ field }) => (
                     <Input
                       {...field}
+                      value={field.value !== undefined && field.value !== null ? String(field.value) : ""}
                       type="number"
                       step="any"
                       label="Factor Value"
                       required
-                      error={errors.factor?.message as string}
+                      error={(errors as any).factor?.message as string}
                     />
                   )}
                 />
@@ -760,7 +790,13 @@ export const MasterDataManager: React.FC<MasterDataManagerProps> = ({ entity }) 
                   name="unit"
                   control={control}
                   render={({ field }) => (
-                    <Input {...field} label="Unit (e.g. kg CO2/kWh)" required error={errors.unit?.message as string} />
+                    <Input
+                      {...field}
+                      value={field.value !== undefined && field.value !== null ? String(field.value) : ""}
+                      label="Unit (e.g. kg CO2/kWh)"
+                      required
+                      error={(errors as any).unit?.message as string}
+                    />
                   )}
                 />
               </>
@@ -774,9 +810,10 @@ export const MasterDataManager: React.FC<MasterDataManagerProps> = ({ entity }) 
                   render={({ field }) => (
                     <Input
                       {...field}
+                      value={field.value !== undefined && field.value !== null ? String(field.value) : ""}
                       label="Product Name"
                       required
-                      error={errors.product_name?.message as string}
+                      error={(errors as any).product_name?.message as string}
                     />
                   )}
                 />
@@ -786,13 +823,14 @@ export const MasterDataManager: React.FC<MasterDataManagerProps> = ({ entity }) 
                   render={({ field }) => (
                     <Select
                       {...field}
+                      value={field.value !== undefined && field.value !== null ? String(field.value) : ""}
                       label="Taxonomy Category"
                       required
                       options={[
                         { value: "", label: "Select a Category" },
-                        ...categories.map((c) => ({ value: c.id, label: c.name })),
+                        ...categories.map((c) => ({ value: String(c.id), label: c.name })),
                       ]}
-                      error={errors.category_id?.message as string}
+                      error={(errors as any).category_id?.message as string}
                     />
                   )}
                 />
@@ -802,13 +840,14 @@ export const MasterDataManager: React.FC<MasterDataManagerProps> = ({ entity }) 
                   render={({ field }) => (
                     <Select
                       {...field}
+                      value={field.value !== undefined && field.value !== null ? String(field.value) : ""}
                       label="Carbon Emission Factor"
                       required
                       options={[
                         { value: "", label: "Select Emission Factor" },
-                        ...emissionFactors.map((f) => ({ value: f.id, label: `${f.name} (${f.factor} ${f.unit})` })),
+                        ...emissionFactors.map((f) => ({ value: String(f.id), label: `${f.name} (${f.factor} ${f.unit})` })),
                       ]}
-                      error={errors.emission_factor_id?.message as string}
+                      error={(errors as any).emission_factor_id?.message as string}
                     />
                   )}
                 />
@@ -818,6 +857,7 @@ export const MasterDataManager: React.FC<MasterDataManagerProps> = ({ entity }) 
                   render={({ field }) => (
                     <Select
                       {...field}
+                      value={field.value !== undefined && field.value !== null ? String(field.value) : ""}
                       label="Carbon Rating Class"
                       required
                       options={[
@@ -828,7 +868,7 @@ export const MasterDataManager: React.FC<MasterDataManagerProps> = ({ entity }) 
                         { value: "D", label: "D" },
                         { value: "E", label: "E" },
                       ]}
-                      error={errors.carbon_rating?.message as string}
+                      error={(errors as any).carbon_rating?.message as string}
                     />
                   )}
                 />
@@ -841,7 +881,13 @@ export const MasterDataManager: React.FC<MasterDataManagerProps> = ({ entity }) 
                   name="title"
                   control={control}
                   render={({ field }) => (
-                    <Input {...field} label="Goal Title" required error={errors.title?.message as string} />
+                    <Input
+                      {...field}
+                      value={field.value !== undefined && field.value !== null ? String(field.value) : ""}
+                      label="Goal Title"
+                      required
+                      error={(errors as any).title?.message as string}
+                    />
                   )}
                 />
                 <Controller
@@ -850,10 +896,11 @@ export const MasterDataManager: React.FC<MasterDataManagerProps> = ({ entity }) 
                   render={({ field }) => (
                     <Select
                       {...field}
+                      value={field.value !== undefined && field.value !== null ? String(field.value) : ""}
                       label="Assigned Department"
                       options={[
                         { value: "", label: "Global / Cross-Departmental" },
-                        ...departments.map((d) => ({ value: d.id, label: d.name })),
+                        ...departments.map((d) => ({ value: String(d.id), label: d.name })),
                       ]}
                     />
                   )}
@@ -864,11 +911,12 @@ export const MasterDataManager: React.FC<MasterDataManagerProps> = ({ entity }) 
                   render={({ field }) => (
                     <Input
                       {...field}
+                      value={field.value !== undefined && field.value !== null ? String(field.value) : ""}
                       type="number"
                       step="any"
                       label="Target Reduction Percentage (%)"
                       required
-                      error={errors.target?.message as string}
+                      error={(errors as any).target?.message as string}
                     />
                   )}
                 />
@@ -878,10 +926,11 @@ export const MasterDataManager: React.FC<MasterDataManagerProps> = ({ entity }) 
                   render={({ field }) => (
                     <Input
                       {...field}
+                      value={field.value !== undefined && field.value !== null ? String(field.value) : ""}
                       type="number"
                       step="any"
                       label="Current Reduction Progress (%)"
-                      error={errors.current_progress?.message as string}
+                      error={(errors as any).current_progress?.message as string}
                     />
                   )}
                 />
@@ -891,10 +940,11 @@ export const MasterDataManager: React.FC<MasterDataManagerProps> = ({ entity }) 
                   render={({ field }) => (
                     <Input
                       {...field}
+                      value={field.value !== undefined && field.value !== null ? String(field.value) : ""}
                       type="date"
                       label="Target Deadline Date"
                       required
-                      error={errors.deadline?.message as string}
+                      error={(errors as any).deadline?.message as string}
                     />
                   )}
                 />
@@ -907,7 +957,13 @@ export const MasterDataManager: React.FC<MasterDataManagerProps> = ({ entity }) 
                   name="title"
                   control={control}
                   render={({ field }) => (
-                    <Input {...field} label="Policy Title" required error={errors.title?.message as string} />
+                    <Input
+                      {...field}
+                      value={field.value !== undefined && field.value !== null ? String(field.value) : ""}
+                      label="Policy Title"
+                      required
+                      error={(errors as any).title?.message as string}
+                    />
                   )}
                 />
                 <Controller
@@ -916,10 +972,11 @@ export const MasterDataManager: React.FC<MasterDataManagerProps> = ({ entity }) 
                   render={({ field }) => (
                     <Input
                       {...field}
+                      value={field.value !== undefined && field.value !== null ? String(field.value) : ""}
                       type="date"
                       label="Policy Effective Date"
                       required
-                      error={errors.effective_date?.message as string}
+                      error={(errors as any).effective_date?.message as string}
                     />
                   )}
                 />
@@ -932,14 +989,26 @@ export const MasterDataManager: React.FC<MasterDataManagerProps> = ({ entity }) 
                   name="name"
                   control={control}
                   render={({ field }) => (
-                    <Input {...field} label="Badge Name" required error={errors.name?.message as string} />
+                    <Input
+                      {...field}
+                      value={field.value !== undefined && field.value !== null ? String(field.value) : ""}
+                      label="Badge Name"
+                      required
+                      error={(errors as any).name?.message as string}
+                    />
                   )}
                 />
                 <Controller
                   name="icon"
                   control={control}
                   render={({ field }) => (
-                    <Input {...field} label="Lucide Icon Name" required error={errors.icon?.message as string} />
+                    <Input
+                      {...field}
+                      value={field.value !== undefined && field.value !== null ? String(field.value) : ""}
+                      label="Lucide Icon Name"
+                      required
+                      error={(errors as any).icon?.message as string}
+                    />
                   )}
                 />
                 <Controller
@@ -948,9 +1017,10 @@ export const MasterDataManager: React.FC<MasterDataManagerProps> = ({ entity }) 
                   render={({ field }) => (
                     <Input
                       {...field}
+                      value={field.value !== undefined && field.value !== null ? String(field.value) : ""}
                       label="Achievement Unlock Condition/Rule"
                       required
-                      error={errors.unlock_rule?.message as string}
+                      error={(errors as any).unlock_rule?.message as string}
                     />
                   )}
                 />
@@ -963,7 +1033,13 @@ export const MasterDataManager: React.FC<MasterDataManagerProps> = ({ entity }) 
                   name="name"
                   control={control}
                   render={({ field }) => (
-                    <Input {...field} label="Reward Item Name" required error={errors.name?.message as string} />
+                    <Input
+                      {...field}
+                      value={field.value !== undefined && field.value !== null ? String(field.value) : ""}
+                      label="Reward Item Name"
+                      required
+                      error={(errors as any).name?.message as string}
+                    />
                   )}
                 />
                 <Controller
@@ -972,10 +1048,11 @@ export const MasterDataManager: React.FC<MasterDataManagerProps> = ({ entity }) 
                   render={({ field }) => (
                     <Input
                       {...field}
+                      value={field.value !== undefined && field.value !== null ? String(field.value) : ""}
                       type="number"
                       label="Required Points"
                       required
-                      error={errors.points_required?.message as string}
+                      error={(errors as any).points_required?.message as string}
                     />
                   )}
                 />
@@ -985,10 +1062,11 @@ export const MasterDataManager: React.FC<MasterDataManagerProps> = ({ entity }) 
                   render={({ field }) => (
                     <Input
                       {...field}
+                      value={field.value !== undefined && field.value !== null ? String(field.value) : ""}
                       type="number"
                       label="Inventory Stock Quantity"
                       required
-                      error={errors.stock?.message as string}
+                      error={(errors as any).stock?.message as string}
                     />
                   )}
                 />
@@ -1010,12 +1088,13 @@ export const MasterDataManager: React.FC<MasterDataManagerProps> = ({ entity }) 
                   render={({ field }) => (
                     <Select
                       {...field}
+                      value={field.value !== undefined && field.value !== null ? String(field.value) : ""}
                       label="Parent Department Link"
                       options={[
                         { value: "", label: "No Parent" },
                         ...departments
                           .filter((d) => d.id !== editingItem?.id)
-                          .map((d) => ({ value: d.id, label: d.name })),
+                          .map((d) => ({ value: String(d.id), label: d.name })),
                       ]}
                     />
                   )}
@@ -1026,9 +1105,10 @@ export const MasterDataManager: React.FC<MasterDataManagerProps> = ({ entity }) 
                   render={({ field }) => (
                     <Input
                       {...field}
+                      value={field.value !== undefined && field.value !== null ? String(field.value) : ""}
                       type="number"
                       label="Total Department Headcount"
-                      error={errors.employee_count?.message as string}
+                      error={(errors as any).employee_count?.message as string}
                     />
                   )}
                 />
@@ -1040,7 +1120,13 @@ export const MasterDataManager: React.FC<MasterDataManagerProps> = ({ entity }) 
                 name="source"
                 control={control}
                 render={({ field }) => (
-                  <Input {...field} label="DataSource Standard Reference" required error={errors.source?.message as string} />
+                  <Input
+                    {...field}
+                    value={field.value !== undefined && field.value !== null ? String(field.value) : ""}
+                    label="DataSource Standard Reference"
+                    required
+                    error={(errors as any).source?.message as string}
+                  />
                 )}
               />
             )}

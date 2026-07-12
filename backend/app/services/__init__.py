@@ -9,3 +9,7 @@ from backend.app.services.policy import PolicyService
 from backend.app.services.badge import BadgeService
 from backend.app.services.reward import RewardService
 from backend.app.services.carbon_transaction import CarbonTransactionService
+from backend.app.services.settings_notifications import SettingService, NotificationService
+from backend.app.services.gamification import GamificationService
+from backend.app.services.social import SocialService
+from backend.app.services.governance import GovernanceService

@@ -11,3 +11,17 @@ from backend.app.repositories.policy import PolicyRepository
 from backend.app.repositories.badge import BadgeRepository
 from backend.app.repositories.reward import RewardRepository
 from backend.app.repositories.carbon_transaction import CarbonTransactionRepository
+from backend.app.repositories.social import (
+    CSRActivityRepository, CSRParticipationRepository,
+    TrainingRepository, TrainingCompletionRepository, DiversityMetricRepository
+)
+from backend.app.repositories.governance import (
+    PolicyAcknowledgementRepository, AuditRepository, ComplianceIssueRepository
+)
+from backend.app.repositories.gamification import (
+    ChallengeRepository, ChallengeParticipationRepository,
+    RewardRedemptionRepository, UserBadgeRepository
+)
+from backend.app.repositories.settings_notifications import (
+    SettingRepository, NotificationRepository
+)

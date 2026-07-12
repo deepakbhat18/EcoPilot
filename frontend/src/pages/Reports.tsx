@@ -1,124 +1,152 @@
-import React, { useState } from "react";
-import { TableWrapper } from "../components/TableWrapper";
+import React, { useState, useEffect } from "react";
+import { api } from "../services/api";
 import { Button } from "../components/Button";
-import { Modal } from "../components/Modal";
-import { Input } from "../components/Input";
-import { Select } from "../components/Select";
-import { FileText, Plus, Download, ShieldCheck } from "lucide-react";
+import { StatCard } from "../components/StatCard";
 import { showToast } from "../components/Toast";
+import {
+  Download,
+  Layers
+} from "lucide-react";
+import {
+  ResponsiveContainer,
+  RadarChart,
+  PolarGrid,
+  PolarAngleAxis,
+  PolarRadiusAxis,
+  Radar,
+  Tooltip
+} from "recharts";
 
 export const Reports: React.FC = () => {
-  const [modalOpen, setModalOpen] = useState(false);
-  const [reportTitle, setReportTitle] = useState("");
-  const [category, setCategory] = useState("environmental");
-  const [format, setFormat] = useState("pdf");
+  const [metrics, setMetrics] = useState<any>({
+    environmental_score: 85,
+    social_score: 78,
+    governance_score: 92,
+    total_emissions_calculated: 0,
+    total_csr_logged: 0,
+    total_compliance_issues: 0
+  });
 
-  const reportsHeaders = ["Document Title", "ESG Category", "Export Format", "Author Role", "Generation Date", "Download"];
-
-  const handleGenerate = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!reportTitle) return;
-    
-    
-    setModalOpen(false);
-    showToast(`Generating report "${reportTitle}"...`, "info");
-    setTimeout(() => {
-      showToast(`Report "${reportTitle}" generated successfully.`, "success");
-      setReportTitle("");
-    }, 2000);
+  const fetchMetrics = async () => {
+    try {
+      const res = await api.get("/reports/summary");
+      setMetrics(res.data);
+    } catch (err) {
+      showToast("Failed to fetch ESG summary reports", "error");
+    }
   };
+
+  useEffect(() => {
+    fetchMetrics();
+  }, []);
+
+  const handleDownload = async (pillar: "environmental" | "social" | "governance") => {
+    try {
+      const response = await api.get(`/reports/${pillar}/export`, {
+        responseType: "blob"
+      });
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", `${pillar}_esg_report.csv`);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      showToast(`${pillar} CSV report exported successfully!`, "success");
+    } catch (err) {
+      showToast("Export failed. Please check backend status.", "error");
+    }
+  };
+
+  const radarData = [
+    { subject: "Environmental (E)", value: metrics.environmental_score, fullMark: 100 },
+    { subject: "Social (S)", value: metrics.social_score, fullMark: 100 },
+    { subject: "Governance (G)", value: metrics.governance_score, fullMark: 100 },
+  ];
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">Compliance Reports Manager</h1>
-          <p className="text-sm text-muted-foreground/80">
-            Generate and export verified ESG reporting formats for auditing agencies, boards, and public relations.
+          <h1 className="text-3xl font-bold tracking-tight text-foreground">ESG Performance Reports</h1>
+          <p className="text-sm text-muted-foreground">
+            Analyze corporate environmental, social, and governance metric summaries and download auditable logs.
           </p>
         </div>
-        <Button onClick={() => setModalOpen(true)} className="gap-2 self-start md:self-auto">
-          <Plus size={16} /> New Report
-        </Button>
       </div>
 
-      {}
-      <div className="flex flex-col gap-3">
-        <h2 className="text-lg font-semibold">Archived Compliance Exports</h2>
-        <TableWrapper headers={reportsHeaders}>
-          <tr>
-            <td className="p-4 font-medium flex items-center gap-2">
-              <FileText size={16} className="text-primary" />
-              Annual Sustainability Assessment FY25
-            </td>
-            <td className="p-4"><span className="text-xs bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 px-2 py-0.5 rounded-full">Environmental</span></td>
-            <td className="p-4 font-bold text-xs">PDF Document</td>
-            <td className="p-4">Senior ESG Consultant</td>
-            <td className="p-4">2026-01-20</td>
-            <td className="p-4">
-              <Button variant="ghost" size="sm" className="h-8 gap-1.5 text-xs text-primary">
-                <Download size={12} /> Download
-              </Button>
-            </td>
-          </tr>
-          <tr>
-            <td className="p-4 font-medium flex items-center gap-2">
-              <FileText size={16} className="text-primary" />
-              Board Governance and Pay Equity Report
-            </td>
-            <td className="p-4"><span className="text-xs bg-violet-500/10 text-violet-600 dark:text-violet-400 px-2 py-0.5 rounded-full">Governance</span></td>
-            <td className="p-4 font-bold text-xs">CSV Data Sheet</td>
-            <td className="p-4">Lead Compliance Officer</td>
-            <td className="p-4">2026-06-30</td>
-            <td className="p-4">
-              <Button variant="ghost" size="sm" className="h-8 gap-1.5 text-xs text-primary">
-                <Download size={12} /> Download
-              </Button>
-            </td>
-          </tr>
-        </TableWrapper>
+      <div className="grid gap-4 grid-cols-1 md:grid-cols-3">
+        <StatCard
+          title="Environmental Score"
+          value={`${metrics.environmental_score}/100`}
+          icon={<Layers className="text-emerald-500" size={20} />}
+          variant="environmental"
+        />
+        <StatCard
+          title="Social Score"
+          value={`${metrics.social_score}/100`}
+          icon={<Layers className="text-indigo-500" size={20} />}
+          variant="social"
+        />
+        <StatCard
+          title="Governance Score"
+          value={`${metrics.governance_score}/100`}
+          icon={<Layers className="text-amber-500" size={20} />}
+          variant="governance"
+        />
       </div>
 
-      {}
-      <Modal isOpen={modalOpen} onClose={() => setModalOpen(false)} title="Configure New ESG Export">
-        <form onSubmit={handleGenerate} className="flex flex-col gap-4">
-          <Input 
-            label="Report Title" 
-            placeholder="e.g. Q2 Facility Carbon Inventory" 
-            value={reportTitle} 
-            onChange={(e) => setReportTitle(e.target.value)}
-            required
-          />
-          <Select 
-            label="ESG Domain Scope" 
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
-            options={[
-              { value: "environmental", label: "Environmental (Carbon/Energy/Water)" },
-              { value: "social", label: "Social (Workforce/Labor/Community)" },
-              { value: "governance", label: "Governance (Board/SEC/Policies)" },
-            ]} 
-          />
-          <Select 
-            label="Export Format" 
-            value={format}
-            onChange={(e) => setFormat(e.target.value)}
-            options={[
-              { value: "pdf", label: "Structured PDF Document" },
-              { value: "csv", label: "Raw Tabular CSV Sheet" },
-              { value: "json", label: "Machine-readable JSON feed" },
-            ]} 
-          />
-          <div className="flex justify-end gap-2.5 mt-2">
-            <Button type="button" variant="outline" size="sm" onClick={() => setModalOpen(false)}>
-              Cancel
-            </Button>
-            <Button type="submit" variant="primary" size="sm" className="gap-1.5">
-              <Plus size={14} /> Start Export
-            </Button>
+      <div className="grid gap-6 grid-cols-1 lg:grid-cols-3">
+        <div className="lg:col-span-2 p-6 rounded-xl border border-border bg-card">
+          <h3 className="text-lg font-semibold mb-4">Pillar-wise Report Downloads</h3>
+          <div className="flex flex-col gap-4">
+            <div className="flex items-center justify-between p-4 rounded-lg bg-muted/30 border border-border">
+              <div>
+                <h4 className="font-semibold text-sm">Environmental Pillar (E)</h4>
+                <p className="text-xs text-muted-foreground">{metrics.total_emissions_calculated} carbon transaction records logged.</p>
+              </div>
+              <Button onClick={() => handleDownload("environmental")} className="gap-2">
+                <Download size={14} /> Download CSV
+              </Button>
+            </div>
+
+            <div className="flex items-center justify-between p-4 rounded-lg bg-muted/30 border border-border">
+              <div>
+                <h4 className="font-semibold text-sm">Social Responsibility Pillar (S)</h4>
+                <p className="text-xs text-muted-foreground">{metrics.total_csr_logged} volunteering and training events logged.</p>
+              </div>
+              <Button onClick={() => handleDownload("social")} className="gap-2">
+                <Download size={14} /> Download CSV
+              </Button>
+            </div>
+
+            <div className="flex items-center justify-between p-4 rounded-lg bg-muted/30 border border-border">
+              <div>
+                <h4 className="font-semibold text-sm">Governance & Audits Pillar (G)</h4>
+                <p className="text-xs text-muted-foreground">{metrics.total_compliance_issues} active compliance and regulatory concerns.</p>
+              </div>
+              <Button onClick={() => handleDownload("governance")} className="gap-2">
+                <Download size={14} /> Download CSV
+              </Button>
+            </div>
           </div>
-        </form>
-      </Modal>
+        </div>
+
+        <div className="p-6 rounded-xl border border-border bg-card">
+          <h3 className="text-lg font-semibold mb-4">ESG Score Distribution</h3>
+          <div className="h-64 flex items-center justify-center">
+            <ResponsiveContainer width="100%" height="100%">
+              <RadarChart cx="50%" cy="50%" outerRadius="80%" data={radarData}>
+                <PolarGrid />
+                <PolarAngleAxis dataKey="subject" />
+                <PolarRadiusAxis angle={30} domain={[0, 100]} />
+                <Radar name="Organization Rating" dataKey="value" stroke="#10b981" fill="#10b981" fillOpacity={0.6} />
+                <Tooltip />
+              </RadarChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

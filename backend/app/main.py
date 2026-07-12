@@ -78,3 +78,18 @@ app.include_router(master_data_router, prefix=settings.API_V1_STR, tags=["Master
 
 from backend.app.api.v1.environmental import router as environmental_router
 app.include_router(environmental_router, prefix=f"{settings.API_V1_STR}/environmental", tags=["Environmental"])
+
+from backend.app.api.v1.social import router as social_router
+app.include_router(social_router, prefix=f"{settings.API_V1_STR}/social", tags=["Social"])
+
+from backend.app.api.v1.governance import router as governance_router
+app.include_router(governance_router, prefix=f"{settings.API_V1_STR}/governance", tags=["Governance"])
+
+from backend.app.api.v1.gamification import router as gamification_router
+app.include_router(gamification_router, prefix=f"{settings.API_V1_STR}/gamification", tags=["Gamification"])
+
+from backend.app.api.v1.settings_notifications import router as settings_notifications_router
+app.include_router(settings_notifications_router, prefix=f"{settings.API_V1_STR}/config", tags=["Settings & Notifications"])
+
+from backend.app.api.v1.reports import router as reports_router
+app.include_router(reports_router, prefix=f"{settings.API_V1_STR}/reports", tags=["Reports"])
