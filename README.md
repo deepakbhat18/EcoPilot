@@ -123,3 +123,5 @@ frontend/
 To access the platform, sign in with the following preset credentials:
 *   **Email:** `analyst@ecopilot.com`
 *   **Password:** `password123`
+
+Deepak Bosudi
