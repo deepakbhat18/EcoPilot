@@ -8,3 +8,4 @@ from backend.app.services.environmental_goal import EnvironmentalGoalService
 from backend.app.services.policy import PolicyService
 from backend.app.services.badge import BadgeService
 from backend.app.services.reward import RewardService
+from backend.app.services.carbon_transaction import CarbonTransactionService

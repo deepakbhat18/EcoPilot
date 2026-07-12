@@ -10,3 +10,4 @@ from backend.app.repositories.environmental_goal import EnvironmentalGoalReposit
 from backend.app.repositories.policy import PolicyRepository
 from backend.app.repositories.badge import BadgeRepository
 from backend.app.repositories.reward import RewardRepository
+from backend.app.repositories.carbon_transaction import CarbonTransactionRepository

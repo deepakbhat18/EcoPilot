@@ -9,3 +9,4 @@ from backend.app.models.environmental_goal import EnvironmentalGoal
 from backend.app.models.policy import Policy
 from backend.app.models.badge import Badge
 from backend.app.models.reward import Reward
+from backend.app.models.carbon_transaction import CarbonTransaction

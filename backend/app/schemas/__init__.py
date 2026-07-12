@@ -8,3 +8,4 @@ from backend.app.schemas.environmental_goal import EnvironmentalGoalBase, Enviro
 from backend.app.schemas.policy import PolicyBase, PolicyCreate, PolicyUpdate, PolicyOut
 from backend.app.schemas.badge import BadgeBase, BadgeCreate, BadgeUpdate, BadgeOut
 from backend.app.schemas.reward import RewardBase, RewardCreate, RewardUpdate, RewardOut
+from backend.app.schemas.carbon_transaction import CarbonTransactionBase, CarbonTransactionCreate, CarbonTransactionUpdate, CarbonTransactionOut

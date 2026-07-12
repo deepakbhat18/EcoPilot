@@ -75,3 +75,6 @@ app.include_router(users_router, prefix=f"{settings.API_V1_STR}/users", tags=["U
 
 from backend.app.api.v1.master_data import router as master_data_router
 app.include_router(master_data_router, prefix=settings.API_V1_STR, tags=["Master Data"])
+
+from backend.app.api.v1.environmental import router as environmental_router
+app.include_router(environmental_router, prefix=f"{settings.API_V1_STR}/environmental", tags=["Environmental"])
