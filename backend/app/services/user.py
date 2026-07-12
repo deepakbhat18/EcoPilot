@@ -15,6 +15,9 @@ class UserService:
     def get_by_email(self, email: str) -> Optional[User]:
         return self.user_repo.get_by_email(email)
 
+    def list_users(self, skip: int = 0, limit: int = 100) -> List[User]:
+        return self.user_repo.get_all(skip=skip, limit=limit)
+
     def create_user(self, user_in: UserCreate) -> User:
         user_data = user_in.model_dump()
         user_data["password"] = hash_password(user_data["password"])

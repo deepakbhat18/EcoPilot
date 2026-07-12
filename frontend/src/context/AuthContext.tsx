@@ -39,6 +39,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
+  const logout = () => {
+    localStorage.removeItem("ecopilot_access_token");
+    localStorage.removeItem("ecopilot_refresh_token");
+    setUser(null);
+    setIsAuthenticated(false);
+  };
+
   useEffect(() => {
     const fetchCurrentUser = async () => {
       const token = localStorage.getItem("ecopilot_access_token");
@@ -50,8 +57,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         const response = await api.get(API_ENDPOINTS.ME);
         setUser(response.data);
         setIsAuthenticated(true);
-      } catch (err) {
-        console.error("Session sync failed:", err);
+      } catch (err: any) {
+        const status = err?.response?.status;
+        if (status === 401 || status === 403) {
+          logout();
+        }
       } finally {
         setIsLoading(false);
       }
@@ -85,13 +95,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     } finally {
       setIsLoading(false);
     }
-  };
-
-  const logout = () => {
-    localStorage.removeItem("ecopilot_access_token");
-    localStorage.removeItem("ecopilot_refresh_token");
-    setUser(null);
-    setIsAuthenticated(false);
   };
 
   const hasPermission = (permission: string): boolean => {

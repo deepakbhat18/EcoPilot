@@ -1,10 +1,11 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, Query
 from sqlalchemy.orm import Session
 from backend.app.database.session import get_db
 from backend.app.services.user import UserService
 from backend.app.dependencies.auth import get_current_user, RoleChecker
 from backend.app.schemas.user import UserOut
 from backend.app.models.user import User
+from typing import List
 
 router = APIRouter()
 
@@ -15,7 +16,21 @@ async def get_my_profile(
     return current_user
 
 @router.get(
-    "/{user_id}", 
+    "",
+    response_model=List[UserOut],
+    dependencies=[Depends(RoleChecker(["admin", "manager", "esg manager"]))]
+)
+async def list_users(
+    skip: int = Query(0, ge=0),
+    limit: int = Query(100, ge=1, le=500),
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+) -> List[UserOut]:
+    user_service = UserService(db)
+    return user_service.list_users(skip=skip, limit=limit)
+
+@router.get(
+    "/{user_id}",
     response_model=UserOut,
     dependencies=[Depends(RoleChecker(["admin", "manager"]))]
 )

@@ -46,10 +46,10 @@ async def get_current_user(
 
 class RoleChecker:
     def __init__(self, allowed_roles: List[str]):
-        self.allowed_roles = allowed_roles
+        self.allowed_roles = [r.lower() for r in allowed_roles]
 
     def __call__(self, current_user: User = Depends(get_current_user)) -> User:
-        role_name = current_user.role.name if current_user.role else ""
+        role_name = (current_user.role.name if current_user.role else "").lower()
         if role_name not in self.allowed_roles:
             raise AuthorizationException(
                 message=f"Access forbidden: user role '{role_name}' is not in allowed roles {self.allowed_roles}."
