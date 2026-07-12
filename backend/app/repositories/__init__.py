@@ -2,3 +2,11 @@ from backend.app.repositories.base import BaseRepository
 from backend.app.repositories.user import UserRepository
 from backend.app.repositories.role import RoleRepository
 from backend.app.repositories.refresh_token import RefreshTokenRepository
+from backend.app.repositories.department import DepartmentRepository
+from backend.app.repositories.category import CategoryRepository
+from backend.app.repositories.emission_factor import EmissionFactorRepository
+from backend.app.repositories.product_esg_profile import ProductESGProfileRepository
+from backend.app.repositories.environmental_goal import EnvironmentalGoalRepository
+from backend.app.repositories.policy import PolicyRepository
+from backend.app.repositories.badge import BadgeRepository
+from backend.app.repositories.reward import RewardRepository

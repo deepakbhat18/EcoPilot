@@ -72,3 +72,6 @@ register_exception_handlers(app)
 app.include_router(health_router, prefix=settings.API_V1_STR)
 app.include_router(auth_router, prefix=f"{settings.API_V1_STR}/auth", tags=["Authentication"])
 app.include_router(users_router, prefix=f"{settings.API_V1_STR}/users", tags=["Users"])
+
+from backend.app.api.v1.master_data import router as master_data_router
+app.include_router(master_data_router, prefix=settings.API_V1_STR, tags=["Master Data"])

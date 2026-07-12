@@ -9,7 +9,15 @@ import {
   FileText, 
   Settings, 
   User,
-  X
+  X,
+  FolderTree,
+  Tag,
+  Flame,
+  ShoppingBag,
+  Target,
+  FileSpreadsheet,
+  Award,
+  Gift
 } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 
@@ -34,8 +42,19 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
     { name: "Profile", path: "/profile", icon: <User size={18} /> },
   ];
 
-  const activeStyle = "flex items-center gap-3 px-4 py-3 text-sm font-semibold text-primary bg-primary/10 border-r-2 border-r-primary transition-all rounded-r-lg";
-  const inactiveStyle = "flex items-center gap-3 px-4 py-3 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted/40 transition-all rounded-r-lg";
+  const masterDataItems = [
+    { name: "Departments", path: "/departments", icon: <FolderTree size={16} /> },
+    { name: "Categories", path: "/categories", icon: <Tag size={16} /> },
+    { name: "Emission Factors", path: "/emission-factors", icon: <Flame size={16} /> },
+    { name: "Product Profiles", path: "/product-esg-profiles", icon: <ShoppingBag size={16} /> },
+    { name: "Goals", path: "/environmental-goals", icon: <Target size={16} /> },
+    { name: "Policies", path: "/policies", icon: <FileSpreadsheet size={16} /> },
+    { name: "Badges", path: "/badges", icon: <Award size={16} /> },
+    { name: "Rewards", path: "/rewards", icon: <Gift size={16} /> },
+  ];
+
+  const activeStyle = "flex items-center gap-3 px-4 py-2.5 text-sm font-semibold text-primary bg-primary/10 border-r-2 border-r-primary transition-all rounded-r-lg";
+  const inactiveStyle = "flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted/40 transition-all rounded-r-lg";
 
   return (
     <>
@@ -53,8 +72,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
           ${isOpen ? "translate-x-0" : "-translate-x-full"}
         `}
       >
-        <div>
-          <div className="flex items-center justify-between px-6 h-16 border-b border-border/60">
+        <div className="flex-1 overflow-y-auto flex flex-col">
+          <div className="flex items-center justify-between px-6 h-16 border-b border-border/60 shrink-0">
             <div className="flex items-center gap-2">
               <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center text-primary-foreground font-extrabold text-lg">
                 E
@@ -71,7 +90,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
             </button>
           </div>
 
-          <nav className="flex flex-col gap-1 pr-4 py-6">
+          <nav className="flex flex-col gap-1 pr-4 py-4 shrink-0">
             {navItems.map((item) => (
               <NavLink
                 key={item.name}
@@ -84,9 +103,30 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
               </NavLink>
             ))}
           </nav>
+
+          <div className="px-6 py-2 shrink-0">
+            <div className="h-px bg-border/60" />
+            <h4 className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground/60 mt-4 mb-2">
+              Master Data Management
+            </h4>
+          </div>
+
+          <nav className="flex flex-col gap-1 pr-4 pb-6 flex-1">
+            {masterDataItems.map((item) => (
+              <NavLink
+                key={item.name}
+                to={item.path}
+                onClick={onClose}
+                className={({ isActive }) => (isActive ? activeStyle : inactiveStyle)}
+              >
+                <span className="text-muted-foreground/70">{item.icon}</span>
+                <span>{item.name}</span>
+              </NavLink>
+            ))}
+          </nav>
         </div>
 
-        <div className="p-6 border-t border-border/60">
+        <div className="p-6 border-t border-border/60 shrink-0">
           <div className="flex items-center gap-3">
             <div className="h-9 w-9 rounded-full bg-secondary flex items-center justify-center font-bold text-muted-foreground text-sm">
               {user?.first_name ? `${user.first_name[0]}${user.last_name[0]}`.toUpperCase() : "EA"}

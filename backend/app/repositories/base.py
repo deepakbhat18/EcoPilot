@@ -1,5 +1,6 @@
-from typing import Generic, TypeVar, Type, Optional, List, Any
+from typing import Generic, TypeVar, Type, Optional, List, Any, Tuple
 from sqlalchemy.orm import Session
+from sqlalchemy import or_
 from backend.app.database.session import Base
 import datetime
 
@@ -59,3 +60,45 @@ class BaseRepository(Generic[ModelType]):
             self.db.delete(db_obj)
             self.db.commit()
         return db_obj
+
+    def query_advanced(
+        self,
+        search_query: Optional[str] = None,
+        search_fields: Optional[List[str]] = None,
+        filters: Optional[dict] = None,
+        sort_by: Optional[str] = None,
+        sort_desc: bool = False,
+        skip: int = 0,
+        limit: int = 100
+    ) -> Tuple[List[ModelType], int]:
+        query = self.db.query(self.model)
+        if hasattr(self.model, "is_deleted"):
+            query = query.filter(self.model.is_deleted == False)
+        if filters:
+            for field, value in filters.items():
+                if value is not None and hasattr(self.model, field):
+                    attr = getattr(self.model, field)
+                    if isinstance(value, list):
+                        query = query.filter(attr.in_(value))
+                    else:
+                        query = query.filter(attr == value)
+        if search_query and search_fields:
+            search_filters = []
+            for field in search_fields:
+                if hasattr(self.model, field):
+                    attr = getattr(self.model, field)
+                    search_filters.append(attr.ilike(f"%{search_query}%"))
+            if search_filters:
+                query = query.filter(or_(*search_filters))
+        total_count = query.count()
+        if sort_by and hasattr(self.model, sort_by):
+            sort_attr = getattr(self.model, sort_by)
+            if sort_desc:
+                query = query.order_by(sort_attr.desc())
+            else:
+                query = query.order_by(sort_attr.asc())
+        else:
+            if hasattr(self.model, "id"):
+                query = query.order_by(self.model.id.asc())
+        results = query.offset(skip).limit(limit).all()
+        return results, total_count

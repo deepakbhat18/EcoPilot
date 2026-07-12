@@ -15,6 +15,7 @@ import { Profile } from "../pages/Profile";
 import { Login } from "../pages/Login";
 import { ForgotPassword } from "../pages/ForgotPassword";
 import { NotFound } from "../pages/NotFound";
+import { MasterDataManager } from "../pages/MasterDataManager";
 
 export const AppRoutes: React.FC = () => {
   return (
@@ -34,6 +35,14 @@ export const AppRoutes: React.FC = () => {
           <Route path="/reports" element={<Reports />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/departments" element={<MasterDataManager entity="departments" />} />
+          <Route path="/categories" element={<MasterDataManager entity="categories" />} />
+          <Route path="/emission-factors" element={<MasterDataManager entity="emission-factors" />} />
+          <Route path="/product-esg-profiles" element={<MasterDataManager entity="product-esg-profiles" />} />
+          <Route path="/environmental-goals" element={<MasterDataManager entity="environmental-goals" />} />
+          <Route path="/policies" element={<MasterDataManager entity="policies" />} />
+          <Route path="/badges" element={<MasterDataManager entity="badges" />} />
+          <Route path="/rewards" element={<MasterDataManager entity="rewards" />} />
         </Route>
       </Route>
 
