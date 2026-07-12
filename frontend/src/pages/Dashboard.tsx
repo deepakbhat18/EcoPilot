@@ -2,16 +2,16 @@ import React, { useState, useEffect } from "react";
 <<<<<<< HEAD
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { 
-  Leaf, 
-  Users, 
-  Building, 
-  Trophy, 
-  TrendingUp, 
-  Activity, 
-  ShieldCheck, 
-  AlertCircle, 
-  Award, 
+import {
+  Leaf,
+  Users,
+  Building,
+  Trophy,
+  TrendingUp,
+  Activity,
+  ShieldCheck,
+  AlertCircle,
+  Award,
   ChevronRight,
   ArrowUpRight,
   Sparkles,
@@ -46,7 +46,7 @@ export const Dashboard: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isFilterLoading, setIsFilterLoading] = useState(false);
   const [activeTab, setActiveTab] = useState<"activities" | "leaderboard">("activities");
-  
+
   // Dashboard states
 =======
 import { api } from "../services/api";
@@ -56,14 +56,14 @@ import { Button } from "../components/Button";
 import { showToast } from "../components/Toast";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import { 
-  Leaf, 
-  Users, 
-  Building, 
-  TrendingDown, 
-  Home, 
-  RefreshCw, 
-  ChevronRight, 
+import {
+  Leaf,
+  Users,
+  Building,
+  TrendingDown,
+  Home,
+  RefreshCw,
+  ChevronRight,
   HelpCircle,
   Shield,
   Activity,
@@ -270,7 +270,7 @@ export const Dashboard: React.FC = () => {
   }
 
   return (
-    <motion.div 
+    <motion.div
       variants={containerVariants}
       initial="hidden"
       animate="show"
@@ -307,8 +307,8 @@ export const Dashboard: React.FC = () => {
   }, []);
 
   const overallEsg = Math.round(
-    ((esgSummary.environmental_score || 85) + 
-     (esgSummary.social_score || 78) + 
+    ((esgSummary.environmental_score || 85) +
+     (esgSummary.social_score || 78) +
      (esgSummary.governance_score || 92)) / 3
   );
 
@@ -368,7 +368,7 @@ export const Dashboard: React.FC = () => {
           <div className="absolute top-0 right-0 p-8 opacity-5 pointer-events-none">
             <Sparkles size={160} />
           </div>
-          
+
           <div className="flex flex-col gap-2">
             <div className="flex items-center gap-2 text-xs text-emerald-400 font-bold tracking-wider uppercase">
               <Shield size={14} />
@@ -409,7 +409,7 @@ export const Dashboard: React.FC = () => {
         {/* ESG Health Meter: Animated Circular overall score */}
         <div className="bg-card border border-border/60 rounded-2xl p-6 shadow-sm flex flex-col justify-between items-center text-center">
           <h3 className="text-xs uppercase tracking-wider text-muted-foreground font-bold">Organization ESG Health Meter</h3>
-          
+
           <div className="relative flex items-center justify-center my-4">
             <svg height={radius * 2} width={radius * 2} className="transform -rotate-90">
               <circle
@@ -493,35 +493,35 @@ export const Dashboard: React.FC = () => {
 
       {/* Filter panel */}
       <FilterPanel onReset={handleResetFilters}>
-        <Select 
-          label="Corporate Facility" 
+        <Select
+          label="Corporate Facility"
           value={facility}
           onChange={(e) => handleFilterChange("facility", e.target.value)}
           options={[
             { value: "all", label: "All Facilities" },
             { value: "hq", label: "HQ London" },
             { value: "sf", label: "San Francisco Hub" },
-          ]} 
+          ]}
         />
-        <Select 
-          label="Reporting Cycle" 
+        <Select
+          label="Reporting Cycle"
           value={cycle}
           onChange={(e) => handleFilterChange("cycle", e.target.value)}
           options={[
             { value: "q2", label: "Q2 2026 (Current)" },
             { value: "q1", label: "Q1 2026" },
             { value: "y2025", label: "FY 2025" },
-          ]} 
+          ]}
         />
-        <Select 
-          label="Compliance Target" 
+        <Select
+          label="Compliance Target"
           value={target}
           onChange={(e) => handleFilterChange("target", e.target.value)}
           options={[
             { value: "net-zero", label: "Net Zero 2030" },
             { value: "diversity", label: "Social Inclusion Target" },
             { value: "audit", label: "SEC Audit Alignment" },
-          ]} 
+          ]}
         />
       </FilterPanel>
 
@@ -580,169 +580,169 @@ export const Dashboard: React.FC = () => {
 =======
           title="Governance Score (G)"
           value={`${esgSummary.governance_score || 92}/100`}
-          change={0.2}
-          changeLabel="Compliance audit green"
-          icon={<Building size={18} />}
-          variant="governance"
+                change={0.2}
+                changeLabel="Compliance audit green"
+                icon={<Building size={18} />}
+                variant="governance"
         />
-      </div>
-
-      {/* Advanced Charts Section */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div className="lg:col-span-2 flex flex-col gap-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            
-            {/* Chart 1: Carbon Footprint Area Chart */}
-            <ChartCard 
-              title="Carbon Footprint Timeline" 
-              subtitle="Auditable monthly carbon logs (in kg CO2e)"
-              isLoading={loading}
-              isEmpty={!envData.line_chart || envData.line_chart.length === 0}
-            >
-              <ResponsiveContainer width="100%" height="100%">
-                <AreaChart data={envData.line_chart || []}>
-                  <defs>
-                    <linearGradient id="colorCarbon" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#10b981" stopOpacity={0.25}/>
-                      <stop offset="95%" stopColor="#10b981" stopOpacity={0.0}/>
-                    </linearGradient>
-                  </defs>
-                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(229, 231, 235, 0.3)" />
-                  <XAxis dataKey="name" stroke="#9ca3af" fontSize={11} tickLine={false} />
-                  <YAxis stroke="#9ca3af" fontSize={11} tickLine={false} />
-                  <Tooltip 
-                    contentStyle={{ 
-                      background: "rgba(255,255,255,0.95)", 
-                      color: "#1f2937", 
-                      border: "1px solid #e5e7eb", 
-                      borderRadius: "8px", 
-                      boxShadow: "0 4px 12px rgba(0,0,0,0.05)" 
-                    }} 
-                  />
-                  <Area type="monotone" dataKey="value" stroke="#10b981" strokeWidth={2} fillOpacity={1} fill="url(#colorCarbon)" />
-                </AreaChart>
-              </ResponsiveContainer>
-            </ChartCard>
-
-            {/* Chart 2: Department Carbon Shares Donut */}
-            <ChartCard
-              title="Departmental Distributions"
-              subtitle="Current carbon footprint percentage distribution"
-              isLoading={loading}
-              isEmpty={!envData.bar_chart || envData.bar_chart.length === 0}
-            >
-              <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                  <Pie
-                    data={envData.bar_chart || []}
-                    cx="50%"
-                    cy="50%"
-                    innerRadius={50}
-                    outerRadius={75}
-                    paddingAngle={3}
-                    dataKey="value"
-                  >
-                    {(envData.bar_chart || []).map((_entry: any, index: number) => (
-                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                    ))}
-                  </Pie>
-                  <Tooltip />
-                </PieChart>
-              </ResponsiveContainer>
-            </ChartCard>
-          </div>
-
-          {/* Department Rankings, Highest & Lowest Performing */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-card border border-border/60 rounded-2xl p-5 shadow-sm flex flex-col gap-4">
-              <h3 className="text-sm font-bold text-foreground flex items-center gap-2">
-                <Award size={16} className="text-emerald-500" />
-                Top Performing ESG Unit
-              </h3>
-              <div className="bg-emerald-500/10 border border-emerald-500/20 rounded-xl p-4 flex items-center justify-between">
-                <div>
-                  <h4 className="text-md font-bold text-foreground">
-                    {envData.lowest_emission_department?.name || "Tokyo Operations"}
-                  </h4>
-                  <p className="text-xs text-muted-foreground">Minimal Carbon Impact & High CSR</p>
-                </div>
-                <div className="text-right">
-                  <span className="text-xs font-bold text-emerald-500">Rank #1</span>
-                  <p className="text-[10px] text-muted-foreground">Green Unit Tier</p>
-                </div>
               </div>
-            </div>
 
-            <div className="bg-card border border-border/60 rounded-2xl p-5 shadow-sm flex flex-col gap-4">
-              <h3 className="text-sm font-bold text-foreground flex items-center gap-2">
-                <AlertCircle size={16} className="text-amber-500" />
-                Carbon Attention Required
-              </h3>
-              <div className="bg-amber-500/10 border border-amber-500/20 rounded-xl p-4 flex items-center justify-between">
-                <div>
-                  <h4 className="text-md font-bold text-foreground">
-                    {envData.highest_emission_department?.name || "Berlin Factory"}
-                  </h4>
-                  <p className="text-xs text-muted-foreground">Highest recorded direct emissions</p>
-                </div>
-                <div className="text-right">
-                  <span className="text-xs font-bold text-amber-500">Review Required</span>
-                  <p className="text-[10px] text-muted-foreground">Scope 1 intensive</p>
-                </div>
+              {/* Advanced Charts Section */}
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div className="lg:col-span-2 flex flex-col gap-8">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                    {/* Chart 1: Carbon Footprint Area Chart */}
+                    <ChartCard
+                      title="Carbon Footprint Timeline"
+                      subtitle="Auditable monthly carbon logs (in kg CO2e)"
+                      isLoading={loading}
+                      isEmpty={!envData.line_chart || envData.line_chart.length === 0}
+                    >
+                      <ResponsiveContainer width="100%" height="100%">
+                        <AreaChart data={envData.line_chart || []}>
+                          <defs>
+                            <linearGradient id="colorCarbon" x1="0" y1="0" x2="0" y2="1">
+                              <stop offset="5%" stopColor="#10b981" stopOpacity={0.25} />
+                              <stop offset="95%" stopColor="#10b981" stopOpacity={0.0} />
+                            </linearGradient>
+                          </defs>
+                          <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(229, 231, 235, 0.3)" />
+                          <XAxis dataKey="name" stroke="#9ca3af" fontSize={11} tickLine={false} />
+                          <YAxis stroke="#9ca3af" fontSize={11} tickLine={false} />
+                          <Tooltip
+                            contentStyle={{
+                              background: "rgba(255,255,255,0.95)",
+                              color: "#1f2937",
+                              border: "1px solid #e5e7eb",
+                              borderRadius: "8px",
+                              boxShadow: "0 4px 12px rgba(0,0,0,0.05)"
+                            }}
+                          />
+                          <Area type="monotone" dataKey="value" stroke="#10b981" strokeWidth={2} fillOpacity={1} fill="url(#colorCarbon)" />
+                        </AreaChart>
+                      </ResponsiveContainer>
+                    </ChartCard>
+
+                    {/* Chart 2: Department Carbon Shares Donut */}
+                    <ChartCard
+                      title="Departmental Distributions"
+                      subtitle="Current carbon footprint percentage distribution"
+                      isLoading={loading}
+                      isEmpty={!envData.bar_chart || envData.bar_chart.length === 0}
+                    >
+                      <ResponsiveContainer width="100%" height="100%">
+                        <PieChart>
+                          <Pie
+                            data={envData.bar_chart || []}
+                            cx="50%"
+                            cy="50%"
+                            innerRadius={50}
+                            outerRadius={75}
+                            paddingAngle={3}
+                            dataKey="value"
+                          >
+                            {(envData.bar_chart || []).map((_entry: any, index: number) => (
+                              <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                            ))}
+                          </Pie>
+                          <Tooltip />
+                        </PieChart>
+                      </ResponsiveContainer>
+                    </ChartCard>
+                  </div>
+
+                  {/* Department Rankings, Highest & Lowest Performing */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="bg-card border border-border/60 rounded-2xl p-5 shadow-sm flex flex-col gap-4">
+                      <h3 className="text-sm font-bold text-foreground flex items-center gap-2">
+                        <Award size={16} className="text-emerald-500" />
+                        Top Performing ESG Unit
+                      </h3>
+                      <div className="bg-emerald-500/10 border border-emerald-500/20 rounded-xl p-4 flex items-center justify-between">
+                        <div>
+                          <h4 className="text-md font-bold text-foreground">
+                            {envData.lowest_emission_department?.name || "Tokyo Operations"}
+                          </h4>
+                          <p className="text-xs text-muted-foreground">Minimal Carbon Impact & High CSR</p>
+                        </div>
+                        <div className="text-right">
+                          <span className="text-xs font-bold text-emerald-500">Rank #1</span>
+                          <p className="text-[10px] text-muted-foreground">Green Unit Tier</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="bg-card border border-border/60 rounded-2xl p-5 shadow-sm flex flex-col gap-4">
+                      <h3 className="text-sm font-bold text-foreground flex items-center gap-2">
+                        <AlertCircle size={16} className="text-amber-500" />
+                        Carbon Attention Required
+                      </h3>
+                      <div className="bg-amber-500/10 border border-amber-500/20 rounded-xl p-4 flex items-center justify-between">
+                        <div>
+                          <h4 className="text-md font-bold text-foreground">
+                            {envData.highest_emission_department?.name || "Berlin Factory"}
+                          </h4>
+                          <p className="text-xs text-muted-foreground">Highest recorded direct emissions</p>
+                        </div>
+                        <div className="text-right">
+                          <span className="text-xs font-bold text-amber-500">Review Required</span>
+                          <p className="text-[10px] text-muted-foreground">Scope 1 intensive</p>
+                        </div>
 >>>>>>> origin/main
-              </div>
-            </div>
-          </div>
+                      </div>
+                    </div>
+                  </div>
 
 <<<<<<< HEAD
-          <div className="bg-secondary/40 border border-border/40 rounded-xl p-3 flex gap-2.5 text-xs items-start">
-            <ShieldCheck size={16} className="text-emerald-500 shrink-0 mt-0.5" />
-            <span className="text-muted-foreground leading-relaxed">
-              <strong>Compliance Notice:</strong> EcoPilot carbon logs align with SEC disclosure preparedness. 
-              {govData.overdue_issues > 0 ? ` Note: ${govData.overdue_issues} overdue policies require attention.` : " Governance parameters are clean."}
-            </span>
-          </div>
-        </motion.div>
+  <div className="bg-secondary/40 border border-border/40 rounded-xl p-3 flex gap-2.5 text-xs items-start">
+    <ShieldCheck size={16} className="text-emerald-500 shrink-0 mt-0.5" />
+    <span className="text-muted-foreground leading-relaxed">
+      <strong>Compliance Notice:</strong> EcoPilot carbon logs align with SEC disclosure preparedness.
+      {govData.overdue_issues > 0 ? ` Note: ${govData.overdue_issues} overdue policies require attention.` : " Governance parameters are clean."}
+    </span>
+  </div>
+        </motion.div >
 
-        {/* Dynamic Trends Chart */}
-        <motion.div variants={itemVariants} className="lg:col-span-2">
-          <ChartCard 
-            title="Carbon Offsets & Energy Usage Trends" 
-            subtitle="Monthly Scope 1 & Scope 2 emission output (kg CO2e)"
-            isLoading={isFilterLoading}
-            height={300}
-          >
-            {envData.line_chart?.length === 0 ? (
-              <div className="h-full flex items-center justify-center text-xs text-muted-foreground">
-                No emission trends logged yet.
-              </div>
-            ) : (
-              <ResponsiveContainer width="100%" height="100%">
-                <AreaChart data={envData.line_chart} margin={{ top: 10, right: 10, left: -10, bottom: 0 }}>
-                  <defs>
-                    <linearGradient id="colorCarbon" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#10B981" stopOpacity={0.25}/>
-                      <stop offset="95%" stopColor="#10B981" stopOpacity={0}/>
-                    </linearGradient>
-                  </defs>
-                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(229, 231, 235, 0.15)" />
-                  <XAxis dataKey="name" stroke="#9CA3AF" fontSize={10} tickLine={false} axisLine={false} />
-                  <YAxis stroke="#9CA3AF" fontSize={10} tickLine={false} axisLine={false} />
-                  <Tooltip 
-                    contentStyle={{ 
-                      backgroundColor: "rgba(25, 30, 40, 0.85)", 
-                      borderColor: "rgba(100, 116, 139, 0.2)",
-                      borderRadius: "8px",
-                      color: "#fff",
-                      fontSize: "12px"
-                    }} 
-                  />
-                  <Area type="monotone" dataKey="value" stroke="#10B981" strokeWidth={2} fillOpacity={1} fill="url(#colorCarbon)" />
-                </AreaChart>
-              </ResponsiveContainer>
-            )}
-          </ChartCard>
-        </motion.div>
+  {/* Dynamic Trends Chart */ }
+  < motion.div variants = { itemVariants } className = "lg:col-span-2" >
+    <ChartCard
+      title="Carbon Offsets & Energy Usage Trends"
+      subtitle="Monthly Scope 1 & Scope 2 emission output (kg CO2e)"
+      isLoading={isFilterLoading}
+      height={300}
+    >
+      {envData.line_chart?.length === 0 ? (
+        <div className="h-full flex items-center justify-center text-xs text-muted-foreground">
+          No emission trends logged yet.
+        </div>
+      ) : (
+        <ResponsiveContainer width="100%" height="100%">
+          <AreaChart data={envData.line_chart} margin={{ top: 10, right: 10, left: -10, bottom: 0 }}>
+            <defs>
+              <linearGradient id="colorCarbon" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor="#10B981" stopOpacity={0.25} />
+                <stop offset="95%" stopColor="#10B981" stopOpacity={0} />
+              </linearGradient>
+            </defs>
+            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(229, 231, 235, 0.15)" />
+            <XAxis dataKey="name" stroke="#9CA3AF" fontSize={10} tickLine={false} axisLine={false} />
+            <YAxis stroke="#9CA3AF" fontSize={10} tickLine={false} axisLine={false} />
+            <Tooltip
+              contentStyle={{
+                backgroundColor: "rgba(25, 30, 40, 0.85)",
+                borderColor: "rgba(100, 116, 139, 0.2)",
+                borderRadius: "8px",
+                color: "#fff",
+                fontSize: "12px"
+              }}
+            />
+            <Area type="monotone" dataKey="value" stroke="#10B981" strokeWidth={2} fillOpacity={1} fill="url(#colorCarbon)" />
+          </AreaChart>
+        </ResponsiveContainer>
+      )}
+    </ChartCard>
+        </motion.div >
 =======
           {/* Recent Carbon Registrations */}
           <div className="bg-card border border-border/60 rounded-2xl p-6 shadow-sm">
@@ -877,50 +877,50 @@ export const Dashboard: React.FC = () => {
           </div>
         </div>
 >>>>>>> origin/main
-      </div>
+      </div >
 
-      {/* Middle Row */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Dynamic Social Chart */}
-        <motion.div variants={itemVariants} className="lg:col-span-2">
-          <ChartCard 
-            title="Corporate CSR Volunteering Engagement" 
-            subtitle="Approved CSR participation logs across corporate departments"
-            isLoading={isFilterLoading}
-            height={280}
-          >
-            {socialData.bar_chart?.length === 0 ? (
-              <div className="h-full flex items-center justify-center text-xs text-muted-foreground">
-                No active CSR participations logged.
-              </div>
-            ) : (
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={socialData.bar_chart} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(229, 231, 235, 0.15)" />
-                  <XAxis dataKey="name" stroke="#9CA3AF" fontSize={10} tickLine={false} axisLine={false} />
-                  <YAxis stroke="#9CA3AF" fontSize={10} tickLine={false} axisLine={false} />
-                  <Tooltip 
-                    contentStyle={{ 
-                      backgroundColor: "rgba(25, 30, 40, 0.85)", 
-                      borderColor: "rgba(100, 116, 139, 0.2)",
-                      borderRadius: "8px",
-                      color: "#fff",
-                      fontSize: "12px"
-                    }} 
-                  />
-                  <Bar dataKey="value" fill="#3B82F6" radius={[4, 4, 0, 0]} maxBarSize={30}>
-                    {socialData.bar_chart.map((_entry: any, index: number) => (
-                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                    ))}
-                  </Bar>
-                </BarChart>
-              </ResponsiveContainer>
-            )}
-          </ChartCard>
-        </motion.div>
+  {/* Middle Row */ }
+  < div className = "grid grid-cols-1 lg:grid-cols-3 gap-6" >
+    {/* Dynamic Social Chart */ }
+    < motion.div variants = { itemVariants } className = "lg:col-span-2" >
+      <ChartCard
+        title="Corporate CSR Volunteering Engagement"
+        subtitle="Approved CSR participation logs across corporate departments"
+        isLoading={isFilterLoading}
+        height={280}
+      >
+        {socialData.bar_chart?.length === 0 ? (
+          <div className="h-full flex items-center justify-center text-xs text-muted-foreground">
+            No active CSR participations logged.
+          </div>
+        ) : (
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={socialData.bar_chart} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(229, 231, 235, 0.15)" />
+              <XAxis dataKey="name" stroke="#9CA3AF" fontSize={10} tickLine={false} axisLine={false} />
+              <YAxis stroke="#9CA3AF" fontSize={10} tickLine={false} axisLine={false} />
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: "rgba(25, 30, 40, 0.85)",
+                  borderColor: "rgba(100, 116, 139, 0.2)",
+                  borderRadius: "8px",
+                  color: "#fff",
+                  fontSize: "12px"
+                }}
+              />
+              <Bar dataKey="value" fill="#3B82F6" radius={[4, 4, 0, 0]} maxBarSize={30}>
+                {socialData.bar_chart.map((_entry: any, index: number) => (
+                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                ))}
+              </Bar>
+            </BarChart>
+          </ResponsiveContainer>
+        )}
+      </ChartCard>
+        </motion.div >
 
-        {/* Quick Actions Panel */}
-        <motion.div variants={itemVariants} className="bg-card border border-border/60 rounded-2xl p-6 shadow-xs flex flex-col justify-between h-[320px]">
+  {/* Quick Actions Panel */ }
+  < motion.div variants = { itemVariants } className = "bg-card border border-border/60 rounded-2xl p-6 shadow-xs flex flex-col justify-between h-[320px]" >
           <div>
             <h3 className="text-sm font-bold text-foreground">ESG Quick Operations</h3>
             <p className="text-xs text-muted-foreground mt-1">
@@ -966,13 +966,13 @@ export const Dashboard: React.FC = () => {
           <div className="text-[10px] text-muted-foreground text-center">
             Logged in as ESG Administrator &bull; Local database active
           </div>
-        </motion.div>
-      </div>
+        </motion.div >
+      </div >
 
-      {/* Bottom Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Activity & Leaderboard Tabs (col-span-2) */}
-        <motion.div variants={itemVariants} className="lg:col-span-2 bg-card border border-border/60 rounded-2xl p-6 shadow-xs min-h-[380px] flex flex-col justify-between">
+  {/* Bottom Grid */ }
+  < div className = "grid grid-cols-1 lg:grid-cols-3 gap-6" >
+    {/* Activity & Leaderboard Tabs (col-span-2) */ }
+    < motion.div variants = { itemVariants } className = "lg:col-span-2 bg-card border border-border/60 rounded-2xl p-6 shadow-xs min-h-[380px] flex flex-col justify-between" >
           <div>
             <div className="flex justify-between items-center border-b border-border/40 pb-3 mb-4">
               <div className="flex gap-2">
@@ -1085,10 +1085,10 @@ export const Dashboard: React.FC = () => {
               View Reports <ArrowRight size={12} className="ml-1" />
             </Button>
           </div>
-        </motion.div>
+        </motion.div >
 
-        {/* Compliance Alerts (col-span-1) */}
-        <motion.div variants={itemVariants} className="bg-card border border-border/60 rounded-2xl p-6 shadow-xs min-h-[380px] flex flex-col justify-between">
+  {/* Compliance Alerts (col-span-1) */ }
+  < motion.div variants = { itemVariants } className = "bg-card border border-border/60 rounded-2xl p-6 shadow-xs min-h-[380px] flex flex-col justify-between" >
           <div>
             <h3 className="text-sm font-bold text-foreground flex items-center gap-2 mb-4">
               <AlertCircle size={16} className="text-amber-500" /> Urgent Compliance Alerts
@@ -1137,8 +1137,8 @@ export const Dashboard: React.FC = () => {
               Go to GRC <ChevronRight size={12} />
             </button>
           </div>
-        </motion.div>
-      </div>
-    </motion.div>
+        </motion.div >
+      </div >
+    </motion.div >
   );
 };
